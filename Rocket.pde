@@ -55,19 +55,16 @@ class Rocket {
     
     // Reward finishing faster and getting close to home AFTER hitting target. 
     // recordDist is the record distance from the hive AFTER a bee hits the target
-    fitness = ((1/(finishTime*recordDist))*(1/(finishTime*recordDist)));
+    fitness = ((1/(finishTime*recordDist)));
  
 
     // Make the function exponential
     fitness = pow(fitness, 4);
     
     if (hitObstacle) fitness *= 0.01;
-    if(hitTarget) fitness *= 1.1;
-    if (tooFar){
-      float hD = map(homeDist, 0, 500, 0, 1);
-      fitness *= hD;
-    }
-    if (hitHome) fitness *= 3; 
+    if(tooFar) fitness *= .05;
+    if (hitHome) fitness *= 4; 
+    if(hitTarget) fitness *= 2;
      println(fitness);
   }
   
@@ -109,14 +106,14 @@ class Rocket {
   void checkTarget() {
     float d = dist(location.x, location.y, target.location.x, target.location.y);
     float homeDist = dist(location.x, location.y, home.x, home.y);
-    if (d > 600 || homeDist > 800){
+    if (d > 300 || recordDist > 400){
       tooFar = true;
     }
     
     if (hitTarget) recordDist = homeDist;
     
-    if (hitTarget && homeDist < 10) hitHome = true;
-    if (d < 30) hitTarget = true;
+    if (hitTarget && homeDist < 50) hitHome = true;
+    if (d < 20) hitTarget = true;
 
     else if (!hitTarget && !hitHome) {
       finishTime++;
