@@ -61,16 +61,18 @@ class Population {
 
   // Did anything finish?
   boolean targetReached() {
-    for (Rocket r : population) {
+    for (int i = population.size() -1; i >= 0; i--) {
+      Rocket r = population.get(i);
       if (r.hitTarget) return true;
-        if(r.checkHome()) success++;
+      if(r.checkHome()) success++;
     }
     return false;
   }
 
   // Calculate fitness for each creature
   void fitness() {
-    for (Rocket r : population) {
+    for (int i = population.size() -1; i >= 0; i--) {
+      Rocket r = population.get(i);
       r.fitness(r.home);
     }
   }
@@ -80,7 +82,7 @@ class Population {
   
   if(matingPool.size() > 0){
      for(int i = matingPool.size() - 1; i <= 0; i--){
-        matingPool.remove(0);
+        matingPool.remove(i);
      }
   }
     
