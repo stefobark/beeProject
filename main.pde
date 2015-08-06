@@ -37,10 +37,10 @@ void setup() {
   target = new Target(width/2-12, height/2-100, 24, 24);
 
   // Create a population with a mutation rate. no longer a limit to population. i changed it to an array list in order to start making game
-  float mutationRate = 0.088;
+  float mutationRate = 0.1;
   hives = new ArrayList<Population>();
-  hives.add(new Population(mutationRate, 20,width/2,200,600));
-  hives.add(new Population(mutationRate, 20,width/2,height-200,600));
+  hives.add(new Population(mutationRate, 80,width/2,200,600));
+  hives.add(new Population(mutationRate, 80,width/2,height-200,600));
 
   // Create the obstacle course  
   obstacles = new ArrayList<Obstacle>();
@@ -98,5 +98,4 @@ void draw() {
 void mousePressed() {
   target.location.x = mouseX;
   target.location.y = mouseY;
-  population.recordtime = population.lifecycle;
 }
