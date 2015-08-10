@@ -32,7 +32,6 @@ class Population {
     popNum = num;
     //make a new set of creatures
     for (int i = 0; i < popNum; i++) {
-      
       population.add(new Rocket(home, new DNA(lifetime)));
     }
   }
@@ -53,6 +52,7 @@ class Population {
       rocket.checkTarget();
       //check if they make it home
       if( rocket.checkHome()){
+        //counter to see how many bees made it home
         madeHome++;
       }
        rocket.run(os);
@@ -63,15 +63,17 @@ class Population {
   boolean targetReached() {
     for (int i = population.size() -1; i >= 0; i--) {
       Rocket r = population.get(i);
-      if (r.hitTarget) return true;
-      if(r.checkHome()) success++;
+      if(r.checkHome()){
+        success++;
+        return true;
+      }
     }
     return false;
   }
 
   // Calculate fitness for each creature
   void fitness() {
-    for (int i = population.size() -1; i >= 0; i--) {
+    for (int i = population.size() - 1; i >= 0; i--) {
       Rocket r = population.get(i);
       r.fitness(r.home);
     }
@@ -81,7 +83,7 @@ class Population {
   void selection() {
   
   if(matingPool.size() > 0){
-     for(int i = matingPool.size() - 1; i <= 0; i--){
+     for(int i = matingPool.size() - 1; i >= 0; i--){
         matingPool.remove(i);
      }
   }
@@ -97,6 +99,12 @@ class Population {
       Rocket r = population.get(i); 
       float fitnessNormal = map(r.getFitness(),0,maxFitness,0,1);
       int n = (int) (fitnessNormal * 100);  // Arbitrary multiplier
+      
+      // i think this will end up making a mating pool that is bigger than the population.
+      // cause we loop through population size, but then add a number of bees
+      // depending on their fitness scores (to make it more likely those genes will be chosen).
+      // this doesn't effect the population size because, down below, we only get one 
+      // of the children from the mating pool on each loop (and it only loops to population size).
       for (int j = 0; j < n; j++) {
         matingPool.add(r);
       }
@@ -111,7 +119,7 @@ class Population {
   void reproduction(PVector home) {
     
     //clear old bees from previous generation
-     for (int i = 0; i < population.size(); i++) {
+     for (int i = population.size() -1; i >= 0 ; i--) {
       population.remove(i);
     }
     
@@ -122,9 +130,7 @@ class Population {
       
       int mom = int(random(population.size()));
       int dad = int(random(population.size()));
-
-      //this keeps failing! the matingPool is sometimes 0... why!?
-      //must be something in selection()
+      
       if(matingPool.size() > mom && matingPool.size() > dad){
         Rocket mR = matingPool.get(mom);
         Rocket dR = matingPool.get(dad);

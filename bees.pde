@@ -28,19 +28,19 @@ ArrayList<Obstacle> obstacles;  //an array list to keep track of all the obstacl
 ArrayList<Population> hives;
 
 void setup() {
-  size(1000, 1000);
+  size(300, 500);
  
 
   
   
   
-  target = new Target(width/2-12, height/2-100, 24, 24);
+  target = new Target(width/2-12, height/2, 24, 24);
 
   // Create a population with a mutation rate. no longer a limit to population. i changed it to an array list in order to start making game
   float mutationRate = 0.1;
   hives = new ArrayList<Population>();
-  hives.add(new Population(mutationRate, 80,width/2,200,600));
-  hives.add(new Population(mutationRate, 80,width/2,height-200,600));
+  hives.add(new Population(mutationRate, 80,width/2,0,600));
+  hives.add(new Population(mutationRate, 80,width/2,height,600));
 
   // Create the obstacle course  
   obstacles = new ArrayList<Obstacle>();
