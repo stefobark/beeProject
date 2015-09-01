@@ -12,11 +12,16 @@ class DNA {
   PVector[] genes;
 
   // The maximum strength of the forces
-  float maxforce = 0.1;
+  // it gets boring to wait forever, so i give them more force sometimes
+  // but then again, it starts to look weird if they're just flying all over the place
+  float maxforce;
 
   // Constructor (makes a DNA of random PVectors)
-  DNA(int lifetime) {
+  DNA(int lifetime, float mForce) {
+    
+    // each frame a new force is applied to the bee, so we have an array of PVectors as long as the lifetime!
     genes = new PVector[lifetime];
+    maxforce = mForce;
     for (int i = 0; i < genes.length; i++) {
       float angle = random(TWO_PI);
       genes[i] = new PVector(cos(angle), sin(angle));
