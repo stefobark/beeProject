@@ -11,6 +11,10 @@ class Rocket {
   PVector location;
   PVector velocity;
   PVector acceleration;
+  
+  int R = 255;
+  int G = 0;
+  int B = 0;
 
   // Size
   float r;
@@ -21,6 +25,7 @@ class Rocket {
   // Fitness and DNA
   float fitness;
   DNA dna;
+  
   // To count which force we're on in the genes
   int geneCounter = 0;
 
@@ -41,31 +46,28 @@ class Rocket {
     r = 4;
     dna = dna_;
     finishTime = 0;          // We're going to count how long it takes to reach target
-    recordDist = 10000;      // Some high number that will be beat instantly
+    recordDist = 10000;
   }
 
   // FITNESS FUNCTION 
-  // distance = distance from target
-  // finish = what order did i finish (first, second, etc. . .)
-  // f(distance,finish) =   (1.0f / finish^1.5) * (1.0f / distance^6);
-  // a lower finish is rewarded (exponentially) and/or shorter distance to target (exponetially)
+  
   void fitness(PVector home) {
     if (recordDist < 1) recordDist = 1;
     float homeDist = dist(location.x, location.y, home.x, home.y);
+    float tDist = dist(location.x, location.y, target.location.x, target.location.y);
     
-    // Reward finishing faster and getting close to home AFTER hitting target. 
-    // recordDist is the record distance from the hive AFTER a bee hits the target
-    fitness = ((1/(finishTime*recordDist)));
- 
-
+    if(hitTarget){
+      // Reward finishing faster and getting close to home
+      fitness = 1/(finishTime*recordDist);
+    } 
+    
     // Make the function exponential
     fitness = pow(fitness, 4);
+
     
-    if (hitObstacle) fitness *= 0.01;
-    if(tooFar) fitness *= .05;
-    if (hitHome) fitness *= 4; 
-    if(hitTarget) fitness *= 2;
-     println(fitness);
+    if (hitObstacle) fitness *= 0.5;
+    if(hitTarget) fitness *= 3;
+    if(hitHome) fitness *=10;
   }
   
   void checkEdges() {
@@ -94,7 +96,7 @@ class Rocket {
       geneCounter = (geneCounter + 1) % dna.genes.length;
       update();
       // If I hit an edge or an obstacle
-      obstacles(os);
+      //obstacles(os);
     }
     // Draw me! if the bee hasn't hit the bad obstacle, if it hasn't reached home, and if it isn't too far away.
     if (!hitObstacle) {
@@ -106,16 +108,26 @@ class Rocket {
   void checkTarget() {
     float d = dist(location.x, location.y, target.location.x, target.location.y);
     float homeDist = dist(location.x, location.y, home.x, home.y);
-    if (d > 300 || recordDist > 400){
+    
+    
+    
+    if (location.x > width || location.x < 0 || location.y > height || location.y < 0){
+      R = 0;
+      G = 255;
+      B = 0;
       tooFar = true;
     }
     
-    if (hitTarget) recordDist = homeDist;
-    
-    if (hitTarget && homeDist < 50) hitHome = true;
-    if (d < 20) hitTarget = true;
+    //turn blue when it hits the target
+    if (hitTarget){
+      if(homeDist < recordDist) recordDist = homeDist;
+      B = 255;
+      R= 0;
+    }
+    if (hitTarget && homeDist < 70) hitHome = true;
+    if (d < 80) hitTarget = true;
 
-    else if (!hitTarget && !hitHome) {
+    else if (!hitHome) {
       finishTime++;
     }
   }
@@ -164,7 +176,7 @@ class Rocket {
     rect(r/2, r*2, r/2, r);
 
     // Rocket body
-    fill(255,255,0,80);
+    fill(R,G,B,80);
     beginShape(TRIANGLES);
     vertex(0, -r*2);
     vertex(-r, r*2);
