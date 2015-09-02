@@ -9,6 +9,8 @@ ArrayList<Float> homeY = new ArrayList<Float>();
 float hMRate; 
  float nMRate;
 float mutRate;
+float lastGenPerformance;
+int genHighHome;
 
   Ecosystem(){
     hives.add(new Population(random(0,.4),80,width/2+100,100,int(random(300,2000)), random(0,1)));
@@ -25,6 +27,16 @@ float mutRate;
     mutationRate = .01;
   }
   
+   void lastGenPerf(int last){
+    lastGenPerformance = last;
+    println("Last Generation's best performance", lastGenPerformance);
+  }
+  
+  void getGenHigh(int high){
+    genHighHome = high;
+    println("genHighHome!!!", genHighHome);
+  }
+  
   void stats(){
     
     for(int i = 0; i < hives.size(); i++){
@@ -32,7 +44,7 @@ float mutRate;
       //writing out stats for each hive
       fill(0);
       pushMatrix();
-      translate(hive.home.x-45,hive.home.y-35);
+      translate(hive.home.x-45,hive.home.y-45);
       text("Hive # " + i, 15, 20);
       translate(0,20);
       text("G # " + hive.getGenerations(), 10, 18);
@@ -175,7 +187,7 @@ float mutRate;
         println("mom life: ", momgenes.genes.get(0));
         println("dad life: ", dadgenes.genes.get(0));
         
-        EcoRules child = momgenes.crossover(dadgenes, mR.madeHome, dR.madeHome);
+        EcoRules child = momgenes.crossover(dadgenes, mR.madeHome, dR.madeHome, genHighHome, lastGenPerformance);
         
         println("moms mRate: ", momgenes.genes.get(1));
         println("dads mRate: ", dadgenes.genes.get(1));
