@@ -1,7 +1,3 @@
-//this class is just like population except that instead of keeping track of a population of bees it keeps track
-//of a population of hives. it uses the a modified version of the same genetic algorithm employed to teach bees
-//but, instead of using the DNA class which is used for individual bees, I created a EcoRules class that does similar stuff.
-
 class Ecosystem {
   
 ArrayList<Population> hives = new ArrayList<Population>();
@@ -10,13 +6,20 @@ int popNum;
 float mutationRate;
 ArrayList<Float> homeX = new ArrayList<Float>();
 ArrayList<Float> homeY = new ArrayList<Float>();
+float hMRate; 
+ float nMRate;
+float mutRate;
 
-  
   Ecosystem(){
-    hives.add(new Population(random(0,.4),80,width/2,100,int(random(300,2000)), random(0,1)));
-    hives.add(new Population(random(0,.4),80,width/2,height-100,int(random(300,2000)), random(0,1)));
-    hives.add(new Population(random(0,.4),80,100,height/2,int(random(300,2000)), random(0,1)));
+    hives.add(new Population(random(0,.4),80,width/2+100,100,int(random(300,2000)), random(0,1)));
+    hives.add(new Population(random(0,.4),80,100+200,100,int(random(300,2000)), random(0,1)));
+    hives.add(new Population(random(0,.4),80,width/2+100,height-100,int(random(300,2000)), random(0,1)));
+    hives.add(new Population(random(0,.4),80,100+200,height-100,int(random(300,2000)), random(0,1)));
+    hives.add(new Population(random(0,.4),80,100+200,height/2,int(random(300,2000)), random(0,1)));
+    hives.add(new Population(random(0,.4),80,width-100,height-100,int(random(300,2000)), random(0,1)));
     hives.add(new Population(random(0,.4),80,width-100,height/2,int(random(300,2000)), random(0,1)));
+    hives.add(new Population(random(0,.4),80,width-100,100,int(random(300,2000)), random(0,1)));
+
     popNum = hives.size();
     matingPool = new ArrayList<Population>();
     mutationRate = .01;
@@ -128,16 +131,27 @@ ArrayList<Float> homeY = new ArrayList<Float>();
     return record;
   }
   
+  
+  int firstToFive(){
+    int winner = 99;
+     for (int i =  0; i <= hives.size()-1 ; i++) {
+       Population r = hives.get(i);
+      if(r.madeHome > 4){
+        winner = i;
+      } 
+     }
+     return winner;
+  }
+  
   // Making the next generation
   void reproduction() {
-      
-      
-    //clear old hives from previous ecosystem
+    //clear old hives from previous ecosystem and remember their locations in homeX and homeY
      for (int i = hives.size() -1; i >= 0 ; i--) {
       homeX.add(hives.get(i).home.x);
       homeY.add(hives.get(i).home.y);
       hives.remove(i);
      }
+     
     println("mating pool size: ", matingPool.size());
     // Refill the population with children from the mating pool
     for (int i = 0; i < popNum; i++){
@@ -146,7 +160,7 @@ ArrayList<Float> homeY = new ArrayList<Float>();
       
       int mom = int(random(hives.size()));
       int dad = int(random(hives.size()));
-      
+      println("hive mating pool size: ", matingPool.size());
       if(matingPool.size() > mom && matingPool.size() > dad){
         Population mR = matingPool.get(mom);
         Population dR = matingPool.get(dad);
@@ -158,8 +172,7 @@ ArrayList<Float> homeY = new ArrayList<Float>();
         println("mom life: ", momgenes.genes.get(0));
         println("dad life: ", dadgenes.genes.get(0));
         
-        // Mate their genes
-        EcoRules child = momgenes.crossover(dadgenes);
+        EcoRules child = momgenes.crossover(dadgenes, mR.madeHome, dR.madeHome);
         
         println("moms mRate: ", momgenes.genes.get(1));
         println("dads mRate: ", dadgenes.genes.get(1));
