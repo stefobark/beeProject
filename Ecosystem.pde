@@ -155,11 +155,14 @@ float mutRate;
     println("mating pool size: ", matingPool.size());
     // Refill the population with children from the mating pool
     for (int i = 0; i < popNum; i++){
-      
+      println(" \n                    Child Hive #", i, "\n");
       // Spin the wheel of fortune to pick two parents
       
       int mom = int(random(hives.size()));
+      println("Picked Mom #", mom);
       int dad = int(random(hives.size()));
+      println("Picked Dad #", dad);
+      
       println("hive mating pool size: ", matingPool.size());
       if(matingPool.size() > mom && matingPool.size() > dad){
         Population mR = matingPool.get(mom);
