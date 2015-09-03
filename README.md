@@ -68,36 +68,48 @@ It works like this:
 
     ArrayList<Float> child = new ArrayList<Float>();
     
-    // Pick a midpoint, the point where we will stop taking genes from one parent and start taking from another
-    // because this is a hive, we aren't talking about PVectors-- our genes are characteristics like
-    // lifetime, mutation rate, and max force. eventually we may work location and popNum into the genes too.
+    // Pick a midpoint, the point where we will stop taking genes 
+    // from one parent and start taking from another
+    // because this is a hive, we aren't talking about 
+    // PVectors-- our genes are characteristics like
+    // lifetime, mutation rate, and max force. eventually
+    // we may work location and popNum into the genes too.
     int crossover = int(random(genes.size()));
     
-    // Take "half" from one and "half" from the other. As we walk through the genes, depending on the performance
+    // Take "half" from one and "half" from the other. As 
+    // we walk through the genes, depending on the performance
     // of this child's parents, we will mutate the genes at a high or low rate. 
-    // the value of mutRate is set by comparing the last generation's max number of successful bees with this one's
+    // the value of mutRate is set by comparing the last generation's 
+     // max number of successful bees with this one's
     for (int i = 0; i < genes.size(); i++) {
       
-     //these are the two different mutation rates. we use a wide range-- hMRate (high mutation rate)--
-     //when none of the hives are able to produce a high enough number of bees smart enough to return home.
+     //these are the two different mutation rates. 
+     //we use a wide range-- hMRate (high mutation rate)--
+     //when none of the hives are able to produce a 
+     //high enough number of bees smart enough to return home.
      //We use a smaller range-- nMRate (normal) when the bees are doing well.
       
      hMRate = random(.8,1.2);
       
      nMRate  = random(.99,1.01);
      
-     // if this generation's high score was less than 75% of the last generation's high score,
-     // we know we need to change some values so we use a bigger mutation rate. 
+     // if this generation's high score was less than 75% 
+     // of the last generation's high score,
+     // we know we need to change some values so we 
+     // use a bigger mutation rate. 
      
      if(genHighHome / last < .75){
         mutRate = hMRate;
       } else {
-        //or, we just use the normal mutation rate, because if bees are returning
-        //we don't want to deviate too much. this hive is on the right track
+        //or, we just use the normal mutation rate, 
+        //because if bees are returning
+        //we don't want to deviate too much. this 
+        //hive is on the right track
         mutRate = nMRate;
       }
       
-      //now,  if the parents did well, we use the mutation rate to change the value of the gene a little bit 
+      //now,  if the parents did well, we use the 
+      //mutation rate to change the value of the gene a little bit 
       //or a lot if they did not do so well
       if (i > crossover) child.add(genes.get(i)*mutRate);
       else               child.add(partner.genes.get(i)*mutRate);
