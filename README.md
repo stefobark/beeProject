@@ -24,7 +24,7 @@ The best hives are the ones that produce the most number of bees that are able t
 
 The best hives get the biggest fitness scores. Hives with the biggest fitness scores occupy more space in the mating pool and therefore their genes are more likely to end up being present in the next generation. The values of the various characteristics are shuffled around and eventually we get some very productive bee hives!
 
-##Hive Characteristic Mutation
+##Bee Mutation
 
 In Shiffman's example, there is mutate().
 ```
@@ -41,11 +41,19 @@ In Shiffman's example, there is mutate().
 ```  
 You give it a float, your desired mutation rate, and for each of the steps (vectors) in the bee's genes, it decides whether or not to change the direction and force by gettting a random number between 0 and 1 and evaluating that against the value of your desired mutation rate. 
 
+##Mutation Rate: High or Low?
+
 With really low mutation rates, the children bees will follow paths very close to their parents-- and! their parents are likely to be the most fit bees so the children will end up being fairly 'fit' themselves. 
 
-But! If no bees come close to the flower in the first generation, hives with really low mutation rates will have a hard time finding the flower in subsequent generations. This is why the question of 'the best mutation rate' came to mind. Hives with higher mutation rates are able to adjust in case the first generation didn't find the flower. Big mutation rates will create children that deviate from the paths of their parents-- and sometimes this is helpful.
+But! If no bees come close to the flower in the first generation, hives with really low mutation rates will have a hard time finding the flower in subsequent generations. 
 
-I approached mutation a bit differently with hive evolution. I don't use a separate function, mutation is applied to every gene for every generation in crossover().. and hive genes aren't PVectors. 
+This is why the question of 'the best mutation rate' came to mind. Hives with higher mutation rates are able to adjust in case the first generation didn't find the flower. Big mutation rates will create children that deviate from the paths of their parents-- and sometimes this is helpful.
+
+So, there has to be a middle path. And that middle path will probably be different under different circumstances. Finding that path manually would be tedious and time consuming. So, we should just let the program do it for us.
+
+##Hive Mutation
+
+I approached hive mutation a bit differently. I don't use a separate function, mutation is applied to every gene for every generation in crossover().. and hive genes aren't PVectors-- they are characteristics.
 
 Mutation is now a random float within one of two ranges (high and low) that adjusts the value of other floats (the genes). If parent hives are successful, it's children's genes will not be adjusted very much-- but, if the parents are not so successful, their children's genes will deviate to a larger degree.
 
@@ -53,6 +61,9 @@ It works like this:
 ```
   // CROSSOVER
   // Creates new DNA sequence from two (this & and a partner)
+  // we tell it who it's partner is, how many bees returned home from the mother and father hives
+  // and the max score for this generation and the last.
+  
   EcoRules crossover(EcoRules partner, float momMadeHome, float dadMadeHome, float genHighHome, float last) {
 
     ArrayList<Float> child = new ArrayList<Float>();
