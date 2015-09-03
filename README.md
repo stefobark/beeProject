@@ -29,6 +29,7 @@ The best hives get the biggest fitness scores. Hives with the biggest fitness sc
 In Shiffman's example, there is mutate().
 ```
 // Based on a mutation probability, picks a new random Vector
+
   void mutate(float m) {
     for (int i = 0; i < genes.length; i++) {
       if (random(1) < m) {
@@ -74,13 +75,15 @@ It works like this:
     // PVectors-- our genes are characteristics like
     // lifetime, mutation rate, and max force. eventually
     // we may work location and popNum into the genes too.
+    
     int crossover = int(random(genes.size()));
     
     // Take "half" from one and "half" from the other. As 
     // we walk through the genes, depending on the performance
     // of this child's parents, we will mutate the genes at a high or low rate. 
     // the value of mutRate is set by comparing the last generation's 
-     // max number of successful bees with this one's
+    // max number of successful bees with this one's
+     
     for (int i = 0; i < genes.size(); i++) {
       
      //these are the two different mutation rates. 
@@ -101,21 +104,25 @@ It works like this:
      if(genHighHome / last < .75){
         mutRate = hMRate;
       } else {
+      
         //or, we just use the normal mutation rate, 
         //because if bees are returning
         //we don't want to deviate too much. this 
         //hive is on the right track
+        
         mutRate = nMRate;
       }
       
       //now,  if the parents did well, we use the 
       //mutation rate to change the value of the gene a little bit 
       //or a lot if they did not do so well
+      
       if (i > crossover) child.add(genes.get(i)*mutRate);
       else               child.add(partner.genes.get(i)*mutRate);
     } 
     
     //create the new genes and return them
+    
     EcoRules newgenes = new EcoRules(child);
     return newgenes;
   }
