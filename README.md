@@ -4,7 +4,7 @@ A "bee hive" simulation based on the genetic algorithm chapter from [Nature of C
 
 ##the idea
 
-Four beehives send out bees to find a flower. They eventually learn to return home after finding the flower. The bees that get to the target and back home the fastest are rewarded with a higher "fitness"-- a higher probability of spreading their genes (their genes are the path they take throughout their lifetime-- its an array of PVectors managed by a class called DNA). Magically, each generation gets better at finding the flower. 
+Four beehives send out bees to find a flower. They eventually learn to return home after finding the flower. The bees that get to the target and back home the fastest are rewarded with a higher "fitness"-- a higher probability of spreading their genes (their genes are the path they take throughout their lifetime-- its an array of PVectors managed by a class called DNA). Magically, each generation gets better at finding the flower and returning home. 
 
 But, there are a few variables that can be manipulated to help the bees learn faster.
 
