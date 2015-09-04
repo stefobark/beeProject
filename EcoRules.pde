@@ -33,7 +33,7 @@ class EcoRules{
     
     // Take "half" from one and "half" from the other. As we walk through the genes, depending on the performance
     // of this child's parents, we will mutate the genes at a high or low rate. 
-    // the value of mutRate is set by a condition above
+    // the value of mutRate is set by comparing the last generation's max number of successful bees with this generation's
     for (int i = 0; i < genes.size(); i++) {
       
       //these are two different mutation rates. we use a wide hMRate (high mutation rate) when none of the hives
@@ -41,10 +41,10 @@ class EcoRules{
       //the bees are doing well. Instead of doing mutation in a seperate function, i just mixed it into crossover()
       
       // up to a half could be taken, or up to half of the current value could be added
-      hMRate = random(.8,1.2);
+      hMRate = random(.7,1.3);
       
       // it could be reduced to 90% its size, or, 10% its current size could be added
-      nMRate  = random(.99,1.01);
+      nMRate  = random(.95,1.05);
       
      //I wonder what the best limit is here... how many bees should return before we stop forcing randomization of genes?
      //it depends on the length of the ecosystem generation!   
