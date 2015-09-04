@@ -95,9 +95,12 @@ void draw() {
     translate(0,15);
  
   if(avgMRates.size() > 0){
+    translate(0,15);
     text("Average mutation rates: \n",13,18);
+    translate(0,15);
     for(float a : avgMRates){
-      text("Average mutation rates: " + a + "\n", 13, 18);
+      text(a, 13, 18);
+      translate(0,15);
     }
   }
   popMatrix();
@@ -105,10 +108,9 @@ void draw() {
   //this will reset the whole ecosystem every "ecoLife" number of frames.
   if(count > ecoLife){
     hiveGen++;
-    eco.getGenHigh(mostHome);
+    eco.collectHiveStats(mostHome,highestEver);
     avgMRates.add(eco.avgMRate);
     //use the highest score ever to evaluate whether or not to apply the big or small mutation rate
-    eco.genPerf(highestEver);
     eco.selection();
     trackHigh.add(mostHome);
     count = 0;
