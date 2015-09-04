@@ -9,27 +9,26 @@ ArrayList<Float> homeY = new ArrayList<Float>();
 float hMRate; 
  float nMRate;
 float mutRate;
-float lastGenPerformance;
+float genPerformance;
 int genHighHome;
 
   Ecosystem(){
-    hives.add(new Population(random(0,.4),80,width/2+100,100,int(random(300,2000)), random(0,1)));
-    hives.add(new Population(random(0,.4),80,100+200,100,int(random(300,2000)), random(0,1)));
-    hives.add(new Population(random(0,.4),80,width/2+100,height-100,int(random(300,2000)), random(0,1)));
-    hives.add(new Population(random(0,.4),80,100+200,height-100,int(random(300,2000)), random(0,1)));
-    hives.add(new Population(random(0,.4),80,100+200,height/2,int(random(300,2000)), random(0,1)));
-    hives.add(new Population(random(0,.4),80,width-100,height-100,int(random(300,2000)), random(0,1)));
-    hives.add(new Population(random(0,.4),80,width-100,height/2,int(random(300,2000)), random(0,1)));
-    hives.add(new Population(random(0,.4),80,width-100,100,int(random(300,2000)), random(0,1)));
+    hives.add(new Population(random(0,.4),40,width/2+100,100,int(random(300,2000)), random(0,1), 0));
+    hives.add(new Population(random(0,.4),40,100+200,100,int(random(300,2000)), random(0,1), 1));
+    hives.add(new Population(random(0,.4),40,width/2+100,height-100,int(random(300,2000)), random(0,1), 2));
+    hives.add(new Population(random(0,.4),40,100+200,height-100,int(random(300,2000)), random(0,1), 3));
+    hives.add(new Population(random(0,.4),40,100+200,height/2,int(random(300,2000)), random(0,1), 4));
+    hives.add(new Population(random(0,.4),40,width-100,height-100,int(random(300,2000)), random(0,1), 5));
+    hives.add(new Population(random(0,.4),40,width-100,height/2,int(random(300,2000)), random(0,1), 6));
+    hives.add(new Population(random(0,.4),40,width-100,100,int(random(300,2000)), random(0,1), 7));
 
     popNum = hives.size();
     matingPool = new ArrayList<Population>();
     mutationRate = .01;
   }
   
-   void lastGenPerf(int last){
-    lastGenPerformance = last;
-    println("Last Generation's best performance", lastGenPerformance);
+   void genPerf(int highest){
+    genPerformance = highest;
   }
   
   void getGenHigh(int high){
@@ -45,7 +44,9 @@ int genHighHome;
       fill(0);
       pushMatrix();
       translate(hive.home.x-45,hive.home.y-45);
+      textSize(14);
       text("Hive # " + i, 15, 20);
+      textSize(10);
       translate(0,20);
       text("G # " + hive.getGenerations(), 10, 18);
       translate(0,10);
@@ -187,7 +188,7 @@ int genHighHome;
         println("mom life: ", momgenes.genes.get(0));
         println("dad life: ", dadgenes.genes.get(0));
         
-        EcoRules child = momgenes.crossover(dadgenes, mR.madeHome, dR.madeHome, genHighHome, lastGenPerformance);
+        EcoRules child = momgenes.crossover(dadgenes, mR.madeHome, dR.madeHome, genHighHome, genPerformance);
         
         println("moms mRate: ", momgenes.genes.get(1));
         println("dads mRate: ", dadgenes.genes.get(1));
@@ -209,7 +210,7 @@ int genHighHome;
         float thisHomeX = homeX.get(i);
         float thisHomeY = homeY.get(i);
         
-        hives.add(new Population(newMRate, 80, thisHomeX, thisHomeY, newLife, mForce));
+        hives.add(new Population(newMRate, 40, thisHomeX, thisHomeY, newLife, mForce, i));
       }
     }
   }
