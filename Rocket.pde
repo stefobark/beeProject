@@ -36,13 +36,16 @@ class Rocket {
   int finishDist;              // What was my finish time?
   int finishTime;              // What was my finish time?
   PVector home;
+  
+  int hiveNum;
 
   //constructor
-  Rocket(PVector l, DNA dna_) {
+  Rocket(PVector l, DNA dna_, int h) {
     acceleration = new PVector();
     velocity = new PVector();
     location = l.get();
     home = l.get();
+    hiveNum = h;
     r = 4;
     dna = dna_;
     finishTime = 0;          // We're going to count how long it takes to reach target
@@ -64,10 +67,9 @@ class Rocket {
     // Make the function exponential
     fitness = pow(fitness, 4);
 
-    
     if (hitObstacle) fitness *= 0.5;
     if(hitTarget) fitness *= 3;
-    if(hitHome) fitness *=10;
+    if(hitHome) fitness *=15;
   }
   
   void checkEdges() {
@@ -95,12 +97,14 @@ class Rocket {
       applyForce(dna.genes[geneCounter]);
       geneCounter = (geneCounter + 1) % dna.genes.length;
       update();
+      
       // If I hit an edge or an obstacle
       //obstacles(os);
+      
     }
     // Draw me! if the bee hasn't hit the bad obstacle, if it hasn't reached home, and if it isn't too far away.
     if (!hitObstacle) {
-      display();
+      display(hiveNum);
     }
   }
 
@@ -160,28 +164,46 @@ class Rocket {
     acceleration.mult(0);
   }
 
-  void display() {
+  void display(int hiveNum) {
     //background(255,0,0);
     float theta = velocity.heading2D() + PI/2;
     fill(255,60);
     stroke(10);
-    strokeWeight(2);
+    strokeWeight(1);
     pushMatrix();
     translate(location.x, location.y);
     rotate(theta);
-
-    // Thrusters
-    rectMode(CENTER);
-    rect(-r/2, r*2, r/2, r);
-    rect(r/2, r*2, r/2, r);
-
-    // Rocket body
-    fill(R,G,B,80);
-    beginShape(TRIANGLES);
-    vertex(0, -r*2);
-    vertex(-r, r*2);
-    vertex(r, r*2);
-    endShape();
+    
+    //if I want the bees to be colored according to their hive
+    /*
+    if(hiveNum == 0) fill(255,0,0,50);
+    if(hiveNum == 1) fill(155,155,0,50);
+    if(hiveNum == 2) fill(0,255,0,50);
+    if(hiveNum == 3) fill(0,155,155,50);
+    if(hiveNum == 4) fill(0,0,255,50);
+    if(hiveNum == 5) fill(155,0,155,50);
+    if(hiveNum == 6) fill(255,255,0,50);
+    if(hiveNum == 7) fill(0,255,255,50);
+    */
+    
+    //upper body
+    fill(255,255,0,60);
+    ellipse(0,-2,4,5);
+    ellipse(0,-6,4,3);
+    ellipse(0,0,4,5);
+    ellipse(0,-2,5,6);
+    ellipse(0,5,4,5);
+    
+    
+    //wings
+    fill(255,255,255,60);
+    ellipse(6,0,7,5);
+    ellipse(-6,0,7,5);
+    
+    
+    //tail segment
+    fill(255,255,0,60);
+    ellipse(0,6,6,9);
 
     popMatrix();
   }
