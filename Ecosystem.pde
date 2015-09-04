@@ -11,16 +11,17 @@ float hMRate;
 float mutRate;
 float genPerformance;
 int genHighHome;
+float avgMRate;
 
   Ecosystem(){
-    hives.add(new Population(random(0,.4),40,width/2+100,100,int(random(300,2000)), random(0,1), 0));
-    hives.add(new Population(random(0,.4),40,100+200,100,int(random(300,2000)), random(0,1), 1));
-    hives.add(new Population(random(0,.4),40,width/2+100,height-100,int(random(300,2000)), random(0,1), 2));
-    hives.add(new Population(random(0,.4),40,100+200,height-100,int(random(300,2000)), random(0,1), 3));
-    hives.add(new Population(random(0,.4),40,100+200,height/2,int(random(300,2000)), random(0,1), 4));
-    hives.add(new Population(random(0,.4),40,width-100,height-100,int(random(300,2000)), random(0,1), 5));
-    hives.add(new Population(random(0,.4),40,width-100,height/2,int(random(300,2000)), random(0,1), 6));
-    hives.add(new Population(random(0,.4),40,width-100,100,int(random(300,2000)), random(0,1), 7));
+    hives.add(new Population(random(0,.4),40,width/2+100,150,int(random(300,2000)), random(0,1), 0));
+    hives.add(new Population(random(0,.4),40,100+250,150,int(random(300,2000)), random(0,1), 1));
+    hives.add(new Population(random(0,.4),40,width/2+100,height-150,int(random(300,2000)), random(0,1), 2));
+    hives.add(new Population(random(0,.4),40,100+250,height-150,int(random(300,2000)), random(0,1), 3));
+    hives.add(new Population(random(0,.4),40,100+250,height/2,int(random(300,2000)), random(0,1), 4));
+    hives.add(new Population(random(0,.4),40,width-150,height-150,int(random(300,2000)), random(0,1), 5));
+    hives.add(new Population(random(0,.4),40,width-150,height/2,int(random(300,2000)), random(0,1), 6));
+    hives.add(new Population(random(0,.4),40,width-150,150,int(random(300,2000)), random(0,1), 7));
 
     popNum = hives.size();
     matingPool = new ArrayList<Population>();
@@ -144,6 +145,18 @@ int genHighHome;
     return record;
   }
   
+  void collectHiveStats(){
+    
+     for (int i =  0; i <= hives.size()-1 ; i++) {
+       Population h = hives.get(i);
+       
+       //get average mutation rates
+       avgMRate += h.mutationRate;
+     }  
+     
+     avgMRate = avgMRate / hives.size();
+     
+     }
   
   int firstToFive(){
     int winner = 99;
