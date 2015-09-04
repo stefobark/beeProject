@@ -24,6 +24,9 @@ class Population {
   int B = 0;
   int madeTarget;
   float maxForce;
+  int sWeight;
+  
+  int hiveNum;
   
   // Fitness and DNA
   float hiveFitness;
@@ -31,7 +34,7 @@ class Population {
   
   
    // Initialize the population
-   Population(float m, int num, float x, float y, int l, float mF) {
+   Population(float m, int num, float x, float y, int l, float mF, int h) {
      
     //mutation rate will start off as a random number between 1 and 0.
     mutationRate = m;
@@ -43,18 +46,21 @@ class Population {
     lifetime = l;
     oLife = l;
     maxForce = mF;
+    hiveNum = h;
     popNum = num;
     //make a new set of creatures
     for (int i = 0; i < popNum; i++) {
-      population.add(new Rocket(home, new DNA(lifetime,mF)));
+      population.add(new Rocket(home, new DNA(lifetime,mF),hiveNum));
     }
   }
   
   void drawHome(){
     
-    fill(R,G,B,100);
+    fill(R,G,B,30);
+    strokeWeight(sWeight);
     ellipse(home.x,home.y, 140,140);
   }
+  
 
   void live (ArrayList<Obstacle> os) {
     // For every creature
@@ -62,6 +68,7 @@ class Population {
       Rocket rocket = population.get(i);
       rocket.checkTarget();
       //check if they make it home
+      
        rocket.run(os);
     }
   }
@@ -70,8 +77,10 @@ class Population {
   boolean targetReached() {
     for (int i = population.size() -1; i >= 0; i--) {
       Rocket r = population.get(i);
+      if(r.hitTarget){
+        madeTarget++;
+      }
       if(r.checkHome()){
-        
         return true;
       }
     }
@@ -85,14 +94,20 @@ class Population {
   void success(){
     for (int i = population.size() -1; i >= 0; i--) {
       Rocket r = population.get(i);
-      if(r.hitTarget){
-        madeTarget++;
-      }
+      
+      //when one bee hits the hive after hitting the target, the hive will turn blue
       if(r.checkHome()){
         madeHome++;
         B = 255;
         R = 0;
       }
+      
+      /*
+        this will count the number of bees to hit the target, 
+        "madeTarget" will be used for the hive's fitness until 
+        one bee from the hive hits the target
+      */
+      targetReached();
     }
   }
 
@@ -100,13 +115,16 @@ class Population {
   void fitness() {
     for (int i = population.size() - 1; i >= 0; i--) {
       Rocket r = population.get(i);
-      
       r.fitness(r.home);
     }
     
-    //count all the winners, add to "success". 
-    //i put this here because fitness() only gets called at the end of the generation
-    //this way i don't count the winners over and over and over
+    /*
+      count all the bees that were able to return home throughout the course of this hive's lifetime
+      add to "success". i put this here because fitness() only gets called at the end of the generation
+      this way i don't count the winners each frame (this produces big numbers because if there is a bee on the hive
+      success gets incremented each frame-- I could use that to count the amount of time it took 
+      for the first bee to come home.
+    */
     success();
   }
   
@@ -114,6 +132,7 @@ class Population {
   float getMaxFitness() {
     float record = 0;
    for (Rocket r : population) {
+      
        if(r.getFitness() > record) {
          record = r.getFitness();
        }
@@ -124,7 +143,6 @@ class Population {
   // Generate a mating pool
   void selection() {
   
- hiveFitness = .5;
     
   if(matingPool.size() > 0){
      for(int i = matingPool.size() - 1; i >= 0; i--){
@@ -148,7 +166,6 @@ class Population {
         matingPool.add(r);
       }
     }
-    println("mating pool size", matingPool.size());
   }
   
   void resetLifetime(){
@@ -186,7 +203,7 @@ class Population {
         child.mutate(mutationRate);
         // Fill the new population with the new child
         PVector location = new PVector(home.x,home.y);
-        population.add(new Rocket(home, child));
+        population.add(new Rocket(home, child, hiveNum));
       }
      
     }
@@ -197,10 +214,21 @@ class Population {
     return generations;
   }
 
+  /*
+    this determines the fitness of a hive.
+  */
   void hiveFitness(){
-    //simple fitness. moving the decimal over so that the number of bees that return will turn into a float between 0 and 1
-    hiveFitness += madeHome * 2;
-    hiveFitness += madeTarget * .5;
+    
+    hiveFitness = madeHome * 2;
+    
+    //if no bees have made it home
+    if(hiveFitness <= 0){
+      //use the number of bees that hit the target, but reduce it a bunch so it doesn't end up outweighing
+      //the fitness of hives that have had bees return
+      //and remember that the fitness gets 'normalized'-- it gets changed to a number 
+      //between 0 and 1 with the map() function
+      hiveFitness = madeTarget * .00001;
+    }
     println("made target", madeTarget);
   }
   
