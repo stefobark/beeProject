@@ -145,8 +145,9 @@ float avgMRate;
     return record;
   }
   
-  void collectHiveStats(){
-    
+  void collectHiveStats(int mostHome, int highestEver){
+     getGenHigh(mostHome);
+     genPerf(highestEver);
      for (int i =  0; i <= hives.size()-1 ; i++) {
        Population h = hives.get(i);
        
@@ -155,7 +156,7 @@ float avgMRate;
      }  
      
      avgMRate = avgMRate / hives.size();
-     
+     println("Average m rate = ", avgMRate);
      }
   
   int firstToFive(){
