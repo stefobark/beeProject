@@ -12,17 +12,18 @@ float mutRate;
 float genPerformance;
 int genHighHome;
 float avgMRate;
+float avgMForce;
+float avgLife;
 
-  Ecosystem(){
-    hives.add(new Population(random(0,.4),40,width/2+100,150,int(random(300,2000)), random(0,1), 0));
-    hives.add(new Population(random(0,.4),40,100+250,150,int(random(300,2000)), random(0,1), 1));
-    hives.add(new Population(random(0,.4),40,width/2+100,height-150,int(random(300,2000)), random(0,1), 2));
-    hives.add(new Population(random(0,.4),40,100+250,height-150,int(random(300,2000)), random(0,1), 3));
-    hives.add(new Population(random(0,.4),40,100+250,height/2,int(random(300,2000)), random(0,1), 4));
-    hives.add(new Population(random(0,.4),40,width-150,height-150,int(random(300,2000)), random(0,1), 5));
-    hives.add(new Population(random(0,.4),40,width-150,height/2,int(random(300,2000)), random(0,1), 6));
-    hives.add(new Population(random(0,.4),40,width-150,150,int(random(300,2000)), random(0,1), 7));
-
+Ecosystem(ArrayList<PVector> startLocs){
+   int countHives = 0;
+    for(PVector s : startLocs){
+      countHives++;
+      //dont want to give it a mutation rate higher than .2
+      //or a lifetime bigger than 2000 or smaller than 300
+      //and a possible max force of up to 2
+      hives.add(new Population(random(0,.2),40,s.x,s.y,int(random(300,2000)), random(0,2), countHives));
+    }
     popNum = hives.size();
     matingPool = new ArrayList<Population>();
     mutationRate = .01;
@@ -148,15 +149,23 @@ float avgMRate;
   void collectHiveStats(int mostHome, int highestEver){
      getGenHigh(mostHome);
      genPerf(highestEver);
+     
      for (int i =  0; i <= hives.size()-1 ; i++) {
        Population h = hives.get(i);
        
        //get average mutation rates
        avgMRate += h.mutationRate;
+       
+       //get average max force
+       avgMForce += h.maxForce;
+       
+       //get average lifetime
+       avgLife += h.lifetime;
      }  
      
      avgMRate = avgMRate / hives.size();
-     println("Average m rate = ", avgMRate);
+     avgMForce = avgMForce / hives.size();
+     avgLife = avgLife / hives.size();
      }
   
   int firstToFive(){
