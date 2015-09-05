@@ -1,4 +1,3 @@
-//this doesn't do anything yet.
 class Graph{
   
   PVector oLoc;
@@ -7,7 +6,20 @@ class Graph{
     oLoc = start;
   }
   
-  void drawLine(PVector line){
+  void drawLine(ArrayList<PVector> points){
    
+   pushMatrix();
+   translate(oLoc.x,oLoc.y);
+   if(points.size() > 0){
+       strokeWeight(15);
+       stroke(200,199,111,200);
+       strokeCap(PROJECT);
+     for(PVector p : points){
+       fill(p.y,90);
+       translate(p.x,0);
+       line(0,0,0,-p.y);
+     }
+   }
+   popMatrix();
   }
 }
