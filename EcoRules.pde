@@ -37,8 +37,9 @@ class EcoRules{
     // the value of mutRate is set by comparing the last generation's max number of successful bees with this generation's
     for (int i = 0; i < genes.size(); i++) {
       
-      //these are two different mutation rates. we use a wide hMRate (high mutation rate) when none of the hives
-      //were able to produce a high enough number of bees smart enough to return home. we use nMRate (normal) when
+      //these are three different mutation rates. we use a very wide vHMRate mutation range 
+      //when less the high score is less than 65% of the highest score ever or if the high score is less than 5
+      // a wide hMRate (high mutation rate) when its less than 75% or we use nMRate (normal) when
       //the bees are doing well. Instead of doing mutation in a seperate function, i just mixed it into crossover()
       
       //high rate
