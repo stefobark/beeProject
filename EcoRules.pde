@@ -3,6 +3,7 @@ class EcoRules{
   ArrayList<Float> genes = new ArrayList<Float>();
   float nMRate;
   float hMRate;
+  float vHMRate;
   float mutRate;
   int mutLimit = 10;
   
@@ -40,28 +41,37 @@ class EcoRules{
       //were able to produce a high enough number of bees smart enough to return home. we use nMRate (normal) when
       //the bees are doing well. Instead of doing mutation in a seperate function, i just mixed it into crossover()
       
-      // up to a half could be taken, or up to half of the current value could be added
-      hMRate = random(.7,1.3);
+      //high rate
+      hMRate = random(.85,1.15);
       
-      // it could be reduced to 90% its size, or, 10% its current size could be added
-      nMRate  = random(.95,1.05);
+      //very high rate
+      vHMRate  = random(.5,1.5);
+      
+      //normal
+      nMRate  = random(.9,1.1);
       
      //I wonder what the best limit is here... how many bees should return before we stop forcing randomization of genes?
      //it depends on the length of the ecosystem generation!   
      //if the maximum number of bees to return to any hive in this generation is less than some number
-     println("genHighHome ", genHighHome);
-     println("last ", last);
-     if(  genHighHome / last < .75){
+    
+     
+     if(genHighHome / last < .75){
         // if bees are not returning to any of the hives we know we need to change some values. 
         // so, we use a bigger mutation rate.
         mutRate = hMRate;
-        println("hMRate produced: ", mutRate);
+        println("used hMRate");
+      } else if(  genHighHome / last < .65 || genHighHome < 5){
+      
+        mutRate = vHMRate;
+        println("used vHMRate");
+        
       } else {
         //or, we just use the normal mutation rate, because if bees are returning
         //we don't want to deviate too much. this hive is on the right track
         mutRate = nMRate;
-        println("NMRate produced: ", mutRate);
+        println("used nMRate");
       }
+      
       
       if (i > crossover) child.add(genes.get(i)*mutRate);
       else               child.add(partner.genes.get(i)*mutRate);
