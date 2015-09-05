@@ -155,7 +155,7 @@ I just want to outline how I see the code working:
  * a Graph object wants an array of PVectors.
   * The PVector is built using x = 10 and y = max returning bees from a generation. 
   * we use this to draw a vertical line, which makes a bar graph.
-* we could also introduce an Obstacle or two, but for now, I think it would be a distraction.
+ * we could also introduce an Obstacle or two, but for now, I think it would be a distraction.
  * Target is a special kind of Obstacle.
 
 
