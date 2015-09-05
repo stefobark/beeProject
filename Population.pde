@@ -56,7 +56,7 @@ class Population {
   
   void drawHome(){
     
-    fill(R,G,B,30);
+    fill(R,G,B,60);
     strokeWeight(sWeight);
     ellipse(home.x,home.y, 140,140);
   }
