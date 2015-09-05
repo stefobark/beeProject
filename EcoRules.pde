@@ -38,11 +38,6 @@ class EcoRules{
     // the value of mutRate is set by comparing the last generation's max number of successful bees with this generation's
     for (int i = 0; i < genes.size(); i++) {
       
-      //these are three different mutation rates. we use a very wide vHMRate mutation range 
-      //when less the high score is less than 65% of the highest score ever or if the high score is less than 5
-      // a wide hMRate (high mutation rate) when its less than 75% or we use nMRate (normal) when
-      //the bees are doing well. Instead of doing mutation in a seperate function, i just mixed it into crossover()
-      
       //high rate
       hMRate = random(.85,1.15);
       
@@ -56,9 +51,7 @@ class EcoRules{
       sMRate  = random(.99,1.01);
       
      //I wonder what the best limit is here... how many bees should return before we stop forcing randomization of genes?
-     //it depends on the length of the ecosystem generation!   
-     //if the maximum number of bees to return to any hive in this generation is less than some number
-    
+     //it depends on the length of the ecosystem generation!  
     
      if(genHighHome / last < .65 || genHighHome < 5){
         // if bees are not returning to any of the hives we know we need to change some values. 
@@ -73,6 +66,8 @@ class EcoRules{
       } else if(genHighHome / last < .85){
         mutRate = nMRate;
         println("used nMRate");
+        
+        //or if it was higher than the highest so far
       } else if(genHighHome / last > 1){
         mutRate = sMRate;
         println("used sMRate");
