@@ -157,7 +157,7 @@ I just want to outline how I see the code working:
   * we use this to draw a vertical line, which makes a bar graph.
 * we could also introduce an Obstacle or two, but for now, I think it would be a distraction.
  * Target is a special kind of Obstacle.
- * 
+
 
 The end.
 
