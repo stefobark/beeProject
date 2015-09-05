@@ -33,7 +33,7 @@ int firstToFive;
 ArrayList<Obstacle> obstacles;  //an array list to keep track of all the obstacles!
 ArrayList<Integer> trackHigh = new ArrayList<Integer>(); //keep track of the highest number of bees to return in one meta-generation (10,000 frames)
 Ecosystem eco; //an ecosystem is a collection of hives
-int ecoLife =  5000; //the lifetime of the ecosystem. this will influence the optimal value of the hive's "lifetime"
+int ecoLife =  1000; //the lifetime of the ecosystem. this will influence the optimal value of the hive's "lifetime"
 ArrayList<PVector> startLocs = new ArrayList<PVector>();
 
 void setup() {
