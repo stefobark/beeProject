@@ -142,4 +142,22 @@ The ecosystem is definitely learning how to create hives that produce bees that 
 
 It's fun.
 
+##More Code Notes
+
+I just want to outline how I see the code working:
+ * Individual bees are managed by the Rocket class (it got its name from Shiffman's example and I didn't change it)
+ * Populations of bees are managed by the Population class
+ * A bee's DNA is managed by the DNA class
+ * A population of bees is a Hive-- so the Population class is our Hive class.
+ * A population of hives is an Ecosystem. Ecosystem is the class that manages a population of hives.
+ * A hive also has DNA, but, a hive's genes describe hive characteristics like mutation rate, lifetime, and max force of bees-- these are managed by the EcoRules class, just like DNA manages bee genes (which are vectors)
+  * Mutation rate is sensitive to the generation's performance. If the generation failed to get within some percentage of the highest score ever, we will either use a very high, high, or normal mutation rate.
+ * a Graph object wants an array of PVectors.
+  * The PVector is built using x = 10 and y = max returning bees from a generation. 
+  * we use this to draw a vertical line, which makes a bar graph.
+* we could also introduce an Obstacle or two, but for now, I think it would be a distraction.
+ * Target is a special kind of Obstacle.
+ * 
+
+The end.
 
