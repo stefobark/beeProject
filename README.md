@@ -124,7 +124,7 @@ It works like this:
 
 And, we print the highest number of bees to return from each generation in the window so we can see that our ecosystem is learning how to produce hives that produce bees that are good at learning how to find flowers. 
 
-It seems that there are a few combinations of characteristics that do well under these circumnstances. I've run the over and over and have observed different values doing pretty well. As I write now, I'm watching an ecosystem that for the first ten hive generations (which is equal to 10,000 frames) did not have any hives that exceeded 300 max returning bees. But, after 30 generations there were some hives that had almost reached 400 max returning bees. A hive finally hit 431 in generation # 39. Now, the highest score ever, after couple hundred generations, is 979.
+It seems that there are a few combinations of characteristics that do well under these circumnstances. I've run the program over and over and have observed different values doing pretty well. As I write now, I'm watching an ecosystem that for the first ten hive generations (which is equal to 10,000 frames) did not have any hives that exceeded 300 max returning bees. But, after 30 generations there were some hives that had almost reached 400 max returning bees. A hive finally hit 431 in generation # 39. Now, the highest score ever, after couple hundred generations, is 979.
 
 The ecosystem is definitely learning how to create hives that produce bees that are able to find flowers and return home!
 
