@@ -49,11 +49,13 @@ class EcoRules{
       
       //small.. for very successful generations
       sMRate  = random(.99,1.01);
-      
      //I wonder what the best limit is here... how many bees should return before we stop forcing randomization of genes?
      //it depends on the length of the ecosystem generation!  
     
-     if(genHighHome / last < .65 || genHighHome < 5){
+   if(genHighHome / last > 1){
+        mutRate = sMRate;
+        println("used sMRate");
+      } else if(genHighHome / last < .65 || genHighHome < 5){
         // if bees are not returning to any of the hives we know we need to change some values. 
         // so, we use a bigger mutation rate.
         mutRate = vHMRate;
@@ -68,10 +70,7 @@ class EcoRules{
         println("used nMRate");
         
         //or if it was higher than the highest so far
-      } else if(genHighHome / last > 1){
-        mutRate = sMRate;
-        println("used sMRate");
-      }
+      } 
       
       
       if (i > crossover) child.add(genes.get(i)*mutRate);
