@@ -17,10 +17,8 @@ class Target extends Obstacle {
     fColor = counter % 155;
     fSize = count % 20;
     size = 200;
-    rotate++;
     if(rotate < 360){
-      rotate = grow;
-      
+      rotate++;
     } else {
       rotate = 0;
     }
@@ -32,7 +30,6 @@ class Target extends Obstacle {
     translate(location.x,location.y);
     rotate(radians(rotate));
     
-    rotate(radians(-rotate+(size/2)));
     //accent on small petals
     fill(fColor/2,size,100,90);
     ellipse(5,5,size*.15,size*.15);
