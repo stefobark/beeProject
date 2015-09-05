@@ -55,15 +55,15 @@ class EcoRules{
      //if the maximum number of bees to return to any hive in this generation is less than some number
     
      
-     if(genHighHome / last < .75){
+     if(genHighHome / last < .65 || genHighHome < 5){
         // if bees are not returning to any of the hives we know we need to change some values. 
         // so, we use a bigger mutation rate.
-        mutRate = hMRate;
-        println("used hMRate");
-      } else if(  genHighHome / last < .65 || genHighHome < 5){
-      
         mutRate = vHMRate;
         println("used vHMRate");
+      } else if( genHighHome / last < .75 ){
+      
+        mutRate = hMRate;
+        println("used hMRate");
         
       } else {
         //or, we just use the normal mutation rate, because if bees are returning
