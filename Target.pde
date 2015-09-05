@@ -1,6 +1,9 @@
 class Target extends Obstacle {
   
   int rotate = 0;
+  int counter = 0;
+  int fColor = 0;
+  int fSize = 0;
   
     Target(float x, float y, float w_, float h_) {
     super(x,y,w_,h_);
@@ -8,49 +11,42 @@ class Target extends Obstacle {
   
   void display() {
     stroke(.5);
+    
+    counter++;
+    fColor = counter % 155;
+    fSize = count % 20;
+    
     if(rotate < 360){
       rotate++;
     } else {
       rotate = 0;
     }
     
-    strokeWeight(.5);
+    
+    
+    noStroke();
     pushMatrix();
     
     translate(location.x,location.y);
     rotate(radians(rotate));
     
-    //bigger petals
-    fill(255,220,0,250);
-    ellipse(40,0,40,40);
-    ellipse(-40,0,40,40);
-    ellipse(0,40,40,40);
-    ellipse(0,-40,40,40);
-    
-    //smaller petals
-    fill(255,10,80,190);
-    ellipse(20,20,40,40);
-    ellipse(-20,-20,40,40);
-    ellipse(20,-20,40,40);
-    ellipse(-20,20,40,40);
-    
-    //accent on bigger petals
-    fill(255,100,0,250);
-    ellipse(40,0,20,20);
-    ellipse(-40,0,20,20);
-    ellipse(0,40,20,20);
-    ellipse(0,-40,20,20);
-    
+    rotate(radians(-rotate+(rotate/2)));
     //accent on small petals
-    fill(100,10,100,190);
-    ellipse(20,20,30,30);
-    ellipse(-20,-20,30,30);
-    ellipse(20,-20,30,30);
-    ellipse(-20,20,30,30);
+    fill(fColor/2,rotate,100,90);
+    ellipse(5,5,rotate*.15,rotate*.15);
+    ellipse(-5,-5,rotate*.15,rotate*.15);
+    ellipse(5,-5,rotate*.15,rotate*.15);
+    ellipse(-5,5,rotate*.15,rotate*.15);
     
     //center
-    fill(255,255,0);
-    ellipse(0,0,80,80);
+    fill(255,rotate,rotate,92);
+    ellipse(0,0,rotate*.5,rotate*.5);
+    
+    fill(255,rotate,0,152);
+    ellipse(0,0,rotate*.3,rotate*.3);
+    
+    fill(255,0,rotate,152);
+    ellipse(0,0,rotate*.1,rotate*.1);
     
     popMatrix();
   }
