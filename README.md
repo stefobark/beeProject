@@ -2,7 +2,7 @@
 
 A "bee hive" simulation based on the genetic algorithm chapter from [Nature of Code](http://natureofcode.com), which, in turn, was inspired by 'Smart Rockets'.
 
-![BEEEES](http://s3pics.s3.amazonaws.com/2015/09/BEEEES.png)
+![BEEEES](http://s3pics.s3.amazonaws.com/2015/09/btetter.png)
 
 ##the idea
 
