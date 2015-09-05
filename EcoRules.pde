@@ -65,7 +65,7 @@ class EcoRules{
         mutRate = hMRate;
         println("used hMRate");
         
-      } else if(genHighHome / last < .85){
+      } else{
         mutRate = nMRate;
         println("used nMRate");
         
