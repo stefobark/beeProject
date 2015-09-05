@@ -4,6 +4,7 @@ class EcoRules{
   float nMRate;
   float hMRate;
   float vHMRate;
+  float sMRate;
   float mutRate;
   int mutLimit = 10;
   
@@ -51,11 +52,14 @@ class EcoRules{
       //normal
       nMRate  = random(.9,1.1);
       
+      //small.. for very successful generations
+      sMRate  = random(.99,1.01);
+      
      //I wonder what the best limit is here... how many bees should return before we stop forcing randomization of genes?
      //it depends on the length of the ecosystem generation!   
      //if the maximum number of bees to return to any hive in this generation is less than some number
     
-     
+    
      if(genHighHome / last < .65 || genHighHome < 5){
         // if bees are not returning to any of the hives we know we need to change some values. 
         // so, we use a bigger mutation rate.
@@ -66,11 +70,12 @@ class EcoRules{
         mutRate = hMRate;
         println("used hMRate");
         
-      } else {
-        //or, we just use the normal mutation rate, because if bees are returning
-        //we don't want to deviate too much. this hive is on the right track
+      } else if(genHighHome / last < .85){
         mutRate = nMRate;
         println("used nMRate");
+      } else if(genHighHome / last > 1){
+        mutRate = sMRate;
+        println("used sMRate");
       }
       
       
