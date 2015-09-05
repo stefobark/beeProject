@@ -36,6 +36,7 @@ class Rocket {
   int finishDist;              // What was my finish time?
   int finishTime;              // What was my finish time?
   PVector home;
+  int targetTime;
   
   int hiveNum;
 
@@ -59,16 +60,19 @@ class Rocket {
     float homeDist = dist(location.x, location.y, home.x, home.y);
     float tDist = dist(location.x, location.y, target.location.x, target.location.y);
     
+    if(!hitTarget) targetTime++;
+    
     if(hitTarget){
       // Reward finishing faster and getting close to home
       fitness = 1/(finishTime*recordDist);
-    } 
+    } else {
+      fitness = 1/(targetTime*tDist*100);
+    }
     
     // Make the function exponential
     fitness = pow(fitness, 4);
 
     if (hitObstacle) fitness *= 0.5;
-    if(hitTarget) fitness *= 3;
     if(hitHome) fitness *=15;
   }
   
@@ -130,7 +134,7 @@ class Rocket {
     }
     if (hitTarget && homeDist < 70) hitHome = true;
     if (d < 80) hitTarget = true;
-
+    
     else if (!hitHome) {
       finishTime++;
     }
