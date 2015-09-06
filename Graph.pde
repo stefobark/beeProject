@@ -10,6 +10,7 @@ class Graph{
    
    pushMatrix();
    translate(oLoc.x,oLoc.y);
+   text("Max Returners", 15,15);
    if(points.size() > 0){
        strokeWeight(15);
        stroke(200,199,111,200);
