@@ -55,12 +55,12 @@ class EcoRules{
    if(genHighHome / last > 1){
         mutRate = sMRate;
         println("used sMRate");
-      } else if(genHighHome / last < .65 || genHighHome < 5){
+      } else if(genHighHome / last < .30 || genHighHome < 1){
         // if bees are not returning to any of the hives we know we need to change some values. 
         // so, we use a bigger mutation rate.
         mutRate = vHMRate;
         println("used vHMRate");
-      } else if( genHighHome / last < .75 ){
+      } else if( genHighHome / last < .50 ){
       
         mutRate = hMRate;
         println("used hMRate");
