@@ -14,11 +14,20 @@ int genHighHome;
 float avgMRate;
 float avgMForce;
 float avgLife;
+ArrayList<PVector> targets = new ArrayList<PVector>();
+
+NeuralBees v;
+
+PVector desired;
 
 Ecosystem(ArrayList<PVector> startLocs){
    int countHives = 0;
+   // The NeuralBee's desired location
+  desired = new PVector(width/2,height/2);
+  
     for(PVector s : startLocs){
       countHives++;
+      targets.add(s);
       //dont want to give it a mutation rate higher than .2
       //or a lifetime bigger than 2000 or smaller than 300
       //and a possible max force of up to 2
@@ -27,6 +36,11 @@ Ecosystem(ArrayList<PVector> startLocs){
     popNum = hives.size();
     matingPool = new ArrayList<Population>();
     mutationRate = .01;
+    
+    // Create the NeuralBee (it has to know about the number of targets
+    // in order to configure its brain)
+    println(targets.size());
+    v = new NeuralBees(targets.size(), width/2, height/2);
   }
   
    void genPerf(int highest){
@@ -74,7 +88,10 @@ Ecosystem(ArrayList<PVector> startLocs){
   void runHives(){
     
     displayHives();
-    
+    // Update the Vehicle
+    v.steer(startLocs);
+    v.update();
+    v.display();
     for(int i = 0; i < eco.hives.size(); i++){
       Population hive = eco.hives.get(i);
       // If the generation hasn't ended yet
