@@ -30,21 +30,19 @@ class Target extends Obstacle {
     translate(location.x,location.y);
     rotate(radians(rotate));
     
-    //accent on small petals
+    fill(255,size,0,152);
+    ellipse(0,0,size*.3,size*.3);
+    
     fill(fColor/2,size,100,90);
     ellipse(5,5,size*.15,size*.15);
     ellipse(-5,-5,size*.15,size*.15);
     ellipse(5,-5,size*.15,size*.15);
     ellipse(-5,5,size*.15,size*.15);
     
-    //center
     fill(255,size,size,92);
     ellipse(0,0,size*.5,size*.5);
     
-    fill(255,size,0,152);
-    ellipse(0,0,size*.3,size*.3);
-    
-    fill(255,0,size,152);
+     fill(255,0,size,92);
     ellipse(0,0,size*.1,size*.1);
     
     popMatrix();
