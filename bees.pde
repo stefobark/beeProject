@@ -128,7 +128,7 @@ void draw() {
     }
   }
   
-  if(avgMRates.size() > 0){
+  if(avgLife.size() > 0){
     translate(0,15);
     text("Average lifetime: \n",13,18);
     translate(0,15);
@@ -150,6 +150,9 @@ void draw() {
   }
   if(avgLife.size() > 10){
     avgLife.remove(0);
+  }
+  if(graphArray.size() > width/10){
+      graphArray.remove(0);
   }
   
   //this will reset the whole ecosystem every "ecoLife" number of frames.
