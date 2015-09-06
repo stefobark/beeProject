@@ -32,6 +32,9 @@ class Population {
   float hiveFitness;
   EcoRules dna;
   
+  // A Predator controlled by a Perceptron
+
+
   
    // Initialize the population
    Population(float m, int num, float x, float y, int l, float mF, int h) {
@@ -48,29 +51,39 @@ class Population {
     maxForce = mF;
     hiveNum = h;
     popNum = num;
+    
+
+    
     //make a new set of creatures
     for (int i = 0; i < popNum; i++) {
       population.add(new Rocket(home, new DNA(lifetime,mF),hiveNum));
     }
   }
   
+    
   void drawHome(){
     
     fill(R,G,B,60);
     strokeWeight(sWeight);
     ellipse(home.x,home.y, 140,140);
   }
-  
+ 
 
   void live (ArrayList<Obstacle> os) {
-    // For every creature
-    for (int i=0;i < population.size(); i++) {
+    
+    
+    
+    // For every hive
+    
+    for (int i=0; i < population.size(); i++) {
+      
       Rocket rocket = population.get(i);
       rocket.checkTarget();
       //check if they make it home
       
        rocket.run(os);
     }
+   
   }
 
   // Did anything finish?
