@@ -51,20 +51,20 @@ class NeuralBees {
     
     // Steer towards all targets
     for (int i = 0; i < forces.length; i++) {
+      PVector t = targets.get(i);
       
-      //every other target will separate, the others will seek
-      if(i % 2 == 0){
-        forces[i] = seek(targets.get(i));
+      //if it is within 80, we will seek
+      if(t.dist(location) < 80){
+        forces[i] = seek(t);
       } else {
-        forces[i] = separate(targets.get(i));
+        forces[i] = separate(t);
       }
     }
     // That array of forces is the input to the brain
     PVector result1 = brain.feedforward(forces);
     // Use the results to steer the vehicle
     applyForce(result1);
-    PVector desired = new PVector(width/2+100,height/2);
-    // Train the brain according to the error
+    PVector desired = new PVector(width/2, height/2);
     PVector error = PVector.sub(desired, location);
     brain.train(forces,error);
     
@@ -109,17 +109,25 @@ class NeuralBees {
     
     // Draw a triangle rotated in the direction of velocity
     float theta = velocity.heading2D() + PI/2;
-    fill(175);
-    stroke(0);
+    fill(255,0,0,99);
+    stroke(10);
     strokeWeight(1);
+    
     pushMatrix();
     translate(location.x,location.y);
+    
     rotate(theta);
+    ellipse(0,-8,5,5);
+    ellipse(0,-5,5,5);
+    
+    ellipse(-10,-5,15,10);
+    ellipse(10,-5,15,10);
     beginShape();
     vertex(0, -r*2);
     vertex(-r, r*2);
     vertex(r, r*2);
     endShape(CLOSE);
+    ellipse(0,2,5,8);
     popMatrix();
   }
 }
