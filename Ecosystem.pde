@@ -16,7 +16,7 @@ float avgMForce;
 float avgLife;
 ArrayList<PVector> targets = new ArrayList<PVector>();
 
-NeuralBees v;
+ArrayList<NeuralBees> v = new ArrayList<NeuralBees>();
 
 PVector desired;
 
@@ -27,7 +27,7 @@ Ecosystem(ArrayList<PVector> startLocs){
   
     for(PVector s : startLocs){
       countHives++;
-      targets.add(s);
+      
       //dont want to give it a mutation rate higher than .2
       //or a lifetime bigger than 2000 or smaller than 300
       //and a possible max force of up to 2
@@ -40,7 +40,17 @@ Ecosystem(ArrayList<PVector> startLocs){
     // Create the NeuralBee (it has to know about the number of targets
     // in order to configure its brain)
     println(targets.size());
-    v = new NeuralBees(targets.size(), width/2, height/2);
+    float distFromCenter;
+    PVector center = new PVector(width/2,height/2);
+    for(Population h : hives){
+      for(Rocket r : h.population){
+          targets.add(r.location);
+      }
+      //create the neural bee
+      v.add(new NeuralBees(targets.size(), random(width), random(height)));
+    }
+    
+   
   }
   
    void genPerf(int highest){
@@ -88,10 +98,14 @@ Ecosystem(ArrayList<PVector> startLocs){
   void runHives(){
     
     displayHives();
-    // Update the Vehicle
-    v.steer(startLocs);
-    v.update();
-    v.display();
+    for(NeuralBees b : v){
+      // Update the Vehicle
+      b.steer(targets);
+      b.update();
+      b.display();
+    }
+    
+    
     for(int i = 0; i < eco.hives.size(); i++){
       Population hive = eco.hives.get(i);
       // If the generation hasn't ended yet
