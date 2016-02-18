@@ -148,7 +148,6 @@ class Population {
       
        if(r.getFitness() > record) {
          record = r.getFitness();
-       
        }
     }
     return record;
@@ -233,7 +232,7 @@ class Population {
   */
   void hiveFitness(){
     
-    hiveFitness = madeHome * 10;
+    hiveFitness = madeHome * 2;
     
     //if no bees have made it home
     if(hiveFitness <= 0){
