@@ -105,12 +105,6 @@ class NeuralBees {
     return steer;
   }
     
-  void rotate(float theta) {
-  float temp = x;
-  x = x*PApplet.cos(theta) - y*PApplet.sin(theta);
-  y = temp*PApplet.sin(theta) + y*PApplet.cos(theta);
-  }
-	
   void display() {
     
     // Draw a triangle rotated in the direction of velocity
