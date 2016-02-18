@@ -73,7 +73,7 @@ class Bee {
     fitness = pow(fitness, 4);
 
     if (hitObstacle) fitness *= 0.5;
-    if(hitHome) fitness *=15;
+    if(hitHome) fitness * = 20;
   }
   
   void checkEdges() {
