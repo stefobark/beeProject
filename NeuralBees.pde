@@ -108,7 +108,7 @@ class NeuralBees {
   void display() {
     
     // Draw a triangle rotated in the direction of velocity
-    //float theta = velocity.heading2D() + PI/2;
+    
     fill(255,0,0,99);
     stroke(10);
     strokeWeight(1);
@@ -116,7 +116,6 @@ class NeuralBees {
     pushMatrix();
     translate(location.x,location.y);
     
-    //rotate(theta);
     ellipse(0,-8,5,5);
     ellipse(0,-5,5,5);
     
