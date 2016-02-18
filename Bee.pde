@@ -52,6 +52,13 @@ class Bee {
     finishTime = 0;          // We're going to count how long it takes to reach target
     recordDist = 10000;
   }
+	
+  public void rotate(float theta) {
+  float temp = x;
+  // Might need to check for rounding errors like with angleBetween function?
+  x = x*PApplet.cos(theta) - y*PApplet.sin(theta);
+  y = temp*PApplet.sin(theta) + y*PApplet.cos(theta);
+	}
 
   // FITNESS FUNCTION 
   
