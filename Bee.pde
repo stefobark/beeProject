@@ -170,7 +170,7 @@ class Bee {
 
   void display() {
     //background(255,0,0);
-    float theta = velocity.heading() + PI/2;
+    float theta = velocity.heading2D() + PI/2;
     fill(255,60);
     stroke(10);
     strokeWeight(1);
