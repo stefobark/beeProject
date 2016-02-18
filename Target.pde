@@ -17,18 +17,12 @@ class Target extends Obstacle {
     fColor = counter % 155;
     fSize = count % 20;
     size = 200;
-    if(rotate < 360){
-      rotate++;
-    } else {
-      rotate = 0;
-    }
-    
     
     
     pushMatrix();
     
     translate(location.x,location.y);
-    rotate(radians(rotate));
+    
     
     fill(255,size,0,152);
     ellipse(0,0,size*.3,size*.3);
