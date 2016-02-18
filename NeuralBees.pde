@@ -105,9 +105,8 @@ class NeuralBees {
     return steer;
   }
     
-   public void rotate(float theta) {
+  void rotate(float theta) {
   float temp = x;
-  // Might need to check for rounding errors like with angleBetween function?
   x = x*PApplet.cos(theta) - y*PApplet.sin(theta);
   y = temp*PApplet.sin(theta) + y*PApplet.cos(theta);
   }
