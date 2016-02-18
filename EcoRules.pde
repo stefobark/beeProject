@@ -25,7 +25,7 @@ class EcoRules{
   
   // CROSSOVER
   // Creates new DNA sequence from two (this & and a partner)
-  EcoRules crossover(EcoRules partner, float momMadeHome, float dadMadeHome, float genHighHome, float last) {
+  EcoRules crossover(EcoRules partner, float genHighHome, float last) {
     ArrayList<Float> child = new ArrayList<Float>();
     
     // Pick a midpoint, the point where we will stop taking from one parent and start taking from another
@@ -48,9 +48,7 @@ class EcoRules{
       nMRate  = random(.9,1.1);
       
       //small.. for very successful generations
-      sMRate  = random(.99,1.01);
-     //I wonder what the best limit is here... how many bees should return before we stop forcing randomization of genes?
-     //it depends on the length of the ecosystem generation!  
+      sMRate  = random(.99,1.01); 
     
    if(genHighHome / last > 1){
         mutRate = sMRate;

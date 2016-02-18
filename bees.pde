@@ -17,16 +17,22 @@ int mostHome;
 int mostHomeHive;
 int highestEver = 0;
 int last;
+//this bee hive's generation's max successful bees
 int genHigh;
-ArrayList<PVector> graphArray = new ArrayList<PVector>();
 
+//to display the bar graph at the bottom
+ArrayList<PVector> graphArray = new ArrayList<PVector>();
+//average mutation rates of all bees
 ArrayList<Float> avgMRates = new ArrayList<Float>();
+//average max force of all bees
 ArrayList<Float> avgMForce = new ArrayList<Float>();
+//average lifespan of all bees
 ArrayList<Float> avgLife = new ArrayList<Float>();
 
+//graph is the class I wrote all the graph stuff in
 Graph highGraph;
 
-Target target;        // Target location
+Target target;
 
 int homeCount;
 int firstToFive;
@@ -37,20 +43,27 @@ int ecoLife =  1000; //the lifetime of the ecosystem. this will influence the op
 ArrayList<PVector> startLocs = new ArrayList<PVector>();
 
 void setup() {
-  size(1000, 1000);
-  
-  startLocs.add(new PVector(width/2+100,250));
-  startLocs.add(new PVector(150+250,300));
-  startLocs.add(new PVector(width/2+100,height-250));
-  startLocs.add(new PVector(100+300,height-300));
-  startLocs.add(new PVector(100+250,height/2));
-  startLocs.add(new PVector(width-200,height-300));
-  startLocs.add(new PVector(width-150,height/2));
-  startLocs.add(new PVector(width-200,300));
+  size(600, 600);
+  //hive 0
+  startLocs.add(new PVector(width/2+100,50));
+  //hive 1
+  startLocs.add(new PVector(width/2+200, 100));
+  //hive 2
+  startLocs.add(new PVector(width/2,100));
+  //hive 3
+  startLocs.add(new PVector(width/2+200,height/2));
+  //hive 4
+  startLocs.add(new PVector(width/2-50,height/2-100));
+  //hive 5
+  startLocs.add(new PVector(width-300,height/2));
+  //hive 6
+  startLocs.add(new PVector(width-50,height/2-100));
+  //hive 7
+  startLocs.add(new PVector(width-200,height/2+50));
   
   eco =  new Ecosystem(startLocs);
-  target = new Target(width/2+100, height/2, 24, 24);
-  highGraph = new Graph(new PVector(20,height-20)); // (TO DO) make a graph of the best scores of each ecosystem generation
+  target = new Target(width/2+100, height/2-100, 24, 24);
+  highGraph = new Graph(new PVector(20,height-20));
 
    
   obstacles = new ArrayList<Obstacle>(); // Create the obstacle course 
@@ -188,9 +201,7 @@ void draw() {
   if(eco.firstToFive() < 98){
    
     firstToFive = eco.firstToFive();
-    
-    Population winningHive = eco.hives.get(mostHomeHive);
-    
+       
   }
   
   eco.stats(); //display hive stats

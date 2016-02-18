@@ -5,7 +5,7 @@
 // Rocket class -- this is just like our Boid / Particle class
 // the only difference is that it has DNA & fitness
 
-class Rocket {
+class Bee {
 
   // All of our physics stuff
   PVector location;
@@ -41,7 +41,7 @@ class Rocket {
   int hiveNum;
 
   //constructor
-  Rocket(PVector l, DNA dna_, int h) {
+  Bee(PVector l, DNA dna_, int h) {
     acceleration = new PVector();
     velocity = new PVector();
     location = l.get();
@@ -55,9 +55,9 @@ class Rocket {
 
   // FITNESS FUNCTION 
   
-  void fitness(PVector home) {
+  void fitness() {
     if (recordDist < 1) recordDist = 1;
-    float homeDist = dist(location.x, location.y, home.x, home.y);
+    
     float tDist = dist(location.x, location.y, target.location.x, target.location.y);
     
     if(!hitTarget) targetTime++;
@@ -95,7 +95,7 @@ class Rocket {
 
   // Run in relation to all the obstacles
   // If I'm stuck, don't bother updating or checking for intersection
-  void run(ArrayList<Obstacle> os) {
+  void run() {
     
     if (!hitObstacle && !hitHome) {
       applyForce(dna.genes[geneCounter]);
@@ -108,7 +108,7 @@ class Rocket {
     }
     // Draw me! if the bee hasn't hit the bad obstacle, if it hasn't reached home, and if it isn't too far away.
     if (!hitObstacle) {
-      display(hiveNum);
+      display();
     }
   }
 
@@ -132,8 +132,8 @@ class Rocket {
       B = 255;
       R= 0;
     }
-    if (hitTarget && homeDist < 70) hitHome = true;
-    if (d < 80) hitTarget = true;
+    if (hitTarget && homeDist < 20) hitHome = true;
+    if (d < 20) hitTarget = true;
     
     else if (!hitHome) {
       finishTime++;
@@ -168,9 +168,9 @@ class Rocket {
     acceleration.mult(0);
   }
 
-  void display(int hiveNum) {
+  void display() {
     //background(255,0,0);
-    float theta = velocity.heading2D() + PI/2;
+    float theta = velocity.heading() + PI/2;
     fill(255,60);
     stroke(10);
     strokeWeight(1);

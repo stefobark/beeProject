@@ -9,8 +9,8 @@
 class Population {
 
   float mutationRate;          // Mutation rate
-  ArrayList<Rocket> population;         // Array to hold the current population
-  ArrayList<Rocket> matingPool;    // ArrayList which we will use for our "mating pool"
+  ArrayList<Bee> population;         // Array to hold the current population
+  ArrayList<Bee> matingPool;    // ArrayList which we will use for our "mating pool"
   int generations;             // Number of generations
   PVector home;
   int popNum;
@@ -42,8 +42,8 @@ class Population {
     //mutation rate will start off as a random number between 1 and 0.
     mutationRate = m;
     dna = new EcoRules(l,m,x,y,mF); 
-    population = new ArrayList<Rocket>();
-    matingPool = new ArrayList<Rocket>();
+    population = new ArrayList<Bee>();
+    matingPool = new ArrayList<Bee>();
     generations = 0;
     home = new PVector(x,y);
     lifetime = l;
@@ -56,7 +56,7 @@ class Population {
     
     //make a new set of creatures
     for (int i = 0; i < popNum; i++) {
-      population.add(new Rocket(home, new DNA(lifetime,mF),hiveNum));
+      population.add(new Bee(home, new DNA(lifetime,mF),hiveNum));
     }
   }
   
@@ -65,11 +65,11 @@ class Population {
     
     fill(R,G,B,60);
     strokeWeight(sWeight);
-    ellipse(home.x,home.y, 140,140);
+    ellipse(home.x,home.y, 80,80);
   }
  
 
-  void live (ArrayList<Obstacle> os) {
+  void live () {
     
     
     
@@ -77,11 +77,11 @@ class Population {
     
     for (int i=0; i < population.size(); i++) {
       
-      Rocket rocket = population.get(i);
-      rocket.checkTarget();
+      Bee b = population.get(i);
+      b.checkTarget();
       //check if they make it home
       
-       rocket.run(os);
+       b.run();
     }
    
   }
@@ -89,7 +89,7 @@ class Population {
   // Did anything finish?
   boolean targetReached() {
     for (int i = population.size() -1; i >= 0; i--) {
-      Rocket r = population.get(i);
+      Bee r = population.get(i);
       if(r.hitTarget){
         madeTarget++;
       }
@@ -106,7 +106,7 @@ class Population {
   
   void success(){
     for (int i = population.size() -1; i >= 0; i--) {
-      Rocket r = population.get(i);
+      Bee r = population.get(i);
       
       //when one bee hits the hive after hitting the target, the hive will turn blue
       if(r.checkHome()){
@@ -127,8 +127,8 @@ class Population {
   // Calculate fitness for each creature
   void fitness() {
     for (int i = population.size() - 1; i >= 0; i--) {
-      Rocket r = population.get(i);
-      r.fitness(r.home);
+      Bee r = population.get(i);
+      r.fitness();
     }
     
     /*
@@ -144,7 +144,7 @@ class Population {
   // Find highest fintess for the population
   float getMaxFitness() {
     float record = 0;
-   for (Rocket r : population) {
+   for (Bee r : population) {
       
        if(r.getFitness() > record) {
          record = r.getFitness();
@@ -171,7 +171,7 @@ class Population {
     // A higher fitness = more entries to mating pool = more likely to be picked as a parent
     // A lower fitness = fewer entries to mating pool = less likely to be picked as a parent
     for (int i=0;i<population.size();i++) {
-      Rocket r = population.get(i); 
+      Bee r = population.get(i); 
       float fitnessNormal = map(r.getFitness(),0,maxFitness,0,1);
       int n = (int) (fitnessNormal * 10);  // Arbitrary multiplier
       
@@ -202,8 +202,8 @@ class Population {
       int dad = int(random(population.size()));
       
       if(matingPool.size() > mom && matingPool.size() > dad){
-        Rocket mR = matingPool.get(mom);
-        Rocket dR = matingPool.get(dad);
+        Bee mR = matingPool.get(mom);
+        Bee dR = matingPool.get(dad);
       
         // Get their genes
         DNA momgenes = mR.getDNA();
@@ -215,8 +215,8 @@ class Population {
         // Mutate their genes
         child.mutate(mutationRate);
         // Fill the new population with the new child
-        PVector location = new PVector(home.x,home.y);
-        population.add(new Rocket(home, child, hiveNum));
+       
+        population.add(new Bee(home, child, hiveNum));
       }
      
     }

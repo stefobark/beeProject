@@ -108,7 +108,7 @@ class NeuralBees {
   void display() {
     
     // Draw a triangle rotated in the direction of velocity
-    float theta = velocity.heading2D() + PI/2;
+    float theta = velocity.heading() + PI/2;
     fill(255,0,0,99);
     stroke(10);
     strokeWeight(1);

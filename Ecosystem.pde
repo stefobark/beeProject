@@ -38,12 +38,10 @@ Ecosystem(ArrayList<PVector> startLocs){
     mutationRate = .01;
     
     // Create the NeuralBee (it has to know about the number of targets
-    // in order to configure its brain)
-    println(targets.size());
-    float distFromCenter;
-    PVector center = new PVector(width/2,height/2);
+    // in order to configure its brain) -- but!! the neural bee only knows how to follow the very first generation.
+    // gotta fix that.
     for(Population h : hives){
-      for(Rocket r : h.population){
+      for(Bee r : h.population){
           targets.add(r.location);
       }
       //create the neural bee
@@ -59,7 +57,6 @@ Ecosystem(ArrayList<PVector> startLocs){
   
   void getGenHigh(int high){
     genHighHome = high;
-    println("genHighHome!!!", genHighHome);
   }
   
   void stats(){
@@ -111,7 +108,7 @@ Ecosystem(ArrayList<PVector> startLocs){
       // If the generation hasn't ended yet
       if (hive.lifecycle < hive.lifetime) {
         hive.lifecycle++;
-        hive.live(obstacles);
+        hive.live();
         if ((hive.targetReached()) && (hive.lifecycle < hive.recordtime)) {
           hive.recordtime = hive.lifecycle;
         }
@@ -143,19 +140,14 @@ Ecosystem(ArrayList<PVector> startLocs){
     
     // Calculate total fitness of whole population
     float maxFitness = getMaxFitness();
-    println("number of hives: ", hives.size());
-    
     // Calculate fitness for each member of the population (scaled to value between 0 and 1)
     // Based on fitness, each member will get added to the mating pool a certain number of times
     // A higher fitness = more entries to mating pool = more likely to be picked as a parent
     // A lower fitness = fewer entries to mating pool = less likely to be picked as a parent
     
     for (int i=0; i<hives.size(); i++) {
-      Population r = hives.get(i); 
-      println("hive ", i, " fitness: ", r.getFitness());
-      
+      Population r = hives.get(i);
       float fitnessNormal = map(r.getFitness(),0,maxFitness,0,1);
-      
       int n = (int) (fitnessNormal * 10);  // Arbitrary multiplier
       for (int j = 0; j < n; j++) {
         matingPool.add(r);
@@ -219,18 +211,14 @@ Ecosystem(ArrayList<PVector> startLocs){
       hives.remove(i);
      }
      
-    println("mating pool size: ", matingPool.size());
     // Refill the population with children from the mating pool
     for (int i = 0; i < popNum; i++){
       println(" \n                    Child Hive #", i, "\n");
       // Spin the wheel of fortune to pick two parents
       
       int mom = int(random(hives.size()));
-      println("Picked Mom #", mom);
       int dad = int(random(hives.size()));
-      println("Picked Dad #", dad);
       
-      println("hive mating pool size: ", matingPool.size());
       if(matingPool.size() > mom && matingPool.size() > dad){
         Population mR = matingPool.get(mom);
         Population dR = matingPool.get(dad);
@@ -239,17 +227,8 @@ Ecosystem(ArrayList<PVector> startLocs){
         EcoRules momgenes = mR.getDNA();
         EcoRules dadgenes = dR.getDNA();
         
-        println("mom life: ", momgenes.genes.get(0));
-        println("dad life: ", dadgenes.genes.get(0));
-        
-        EcoRules child = momgenes.crossover(dadgenes, mR.madeHome, dR.madeHome, genHighHome, genPerformance);
-        
-        println("moms mRate: ", momgenes.genes.get(1));
-        println("dads mRate: ", dadgenes.genes.get(1));
-        
-        println("child lifetime: ", child.genes.get(0));
-        println("child mRate: ", child.genes.get(1));
-        println("child mForce; ", child.genes.get(4));
+        EcoRules child = momgenes.crossover(dadgenes, genHighHome, genPerformance);
+       
         
         float mForce = child.genes.get(4);
         
