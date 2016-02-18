@@ -170,13 +170,13 @@ class Bee {
 
   void display() {
     //background(255,0,0);
-    float theta = velocity.heading2D() + PI/2;
+    //float theta = velocity.heading2D() + PI/2;
     fill(255,60);
     stroke(10);
     strokeWeight(1);
     pushMatrix();
     translate(location.x, location.y);
-    rotate(theta);
+    //rotate(theta);
     
     //if I want the bees to be colored according to their hive
     /*
