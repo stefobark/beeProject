@@ -169,46 +169,12 @@ class Bee {
   }
 
   void display() {
-    //background(255,0,0);
-    //float theta = velocity.heading2D() + PI/2;
-    fill(255,60);
-    stroke(10);
-    strokeWeight(1);
+    
     pushMatrix();
     translate(location.x, location.y);
-    //rotate(theta);
-    
-    //if I want the bees to be colored according to their hive
-    /*
-    if(hiveNum == 0) fill(255,0,0,50);
-    if(hiveNum == 1) fill(155,155,0,50);
-    if(hiveNum == 2) fill(0,255,0,50);
-    if(hiveNum == 3) fill(0,155,155,50);
-    if(hiveNum == 4) fill(0,0,255,50);
-    if(hiveNum == 5) fill(155,0,155,50);
-    if(hiveNum == 6) fill(255,255,0,50);
-    if(hiveNum == 7) fill(0,255,255,50);
-    */
-    
-    //upper body
-    fill(255,255,0,60);
-    ellipse(0,-2,4,5);
-    ellipse(0,-6,4,3);
-    ellipse(0,0,4,5);
-    ellipse(0,-2,5,6);
-    ellipse(0,5,4,5);
-    
-    
-    //wings
-    fill(255,255,255,60);
-    ellipse(6,0,7,5);
-    ellipse(-6,0,7,5);
-    
-    
-    //tail segment
-    fill(255,255,0,60);
-    ellipse(0,6,6,9);
-
+    strokeWeight(5);
+    fill(155,155,0);
+    ellipse(0,0,10,10);
     popMatrix();
   }
 

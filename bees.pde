@@ -39,8 +39,21 @@ int firstToFive;
 ArrayList<Obstacle> obstacles;  //an array list to keep track of all the obstacles!
 ArrayList<Integer> trackHigh = new ArrayList<Integer>(); //keep track of the highest number of bees to return in one meta-generation (10,000 frames)
 Ecosystem eco; //an ecosystem is a collection of hives
-int ecoLife =  1000; //the lifetime of the ecosystem. this will influence the optimal value of the hive's "lifetime"
+int ecoLife =  2000; //the lifetime of the ecosystem. this will influence the optimal value of the hive's "lifetime"
 ArrayList<PVector> startLocs = new ArrayList<PVector>();
+ArrayList<PVector> targets = new ArrayList<PVector>();
+  ArrayList<NeuralBees> v = new ArrayList<NeuralBees>();; 
+
+void runHives(){
+    
+    eco.displayHives();
+    for(NeuralBees b : v){
+      // Update the Vehicle
+      b.steer(targets);
+      b.update();
+      b.display();
+    }
+}
 
 void setup() {
   size(600, 600);
@@ -64,10 +77,20 @@ void setup() {
   eco =  new Ecosystem(startLocs);
   target = new Target(width/2+100, height/2-100, 24, 24);
   highGraph = new Graph(new PVector(20,height-20));
-
-   
-  obstacles = new ArrayList<Obstacle>(); // Create the obstacle course 
-  //obstacles.add(new Obstacle(width*.38, height/2, width/4, 10));
+  ArrayList<Population> hives = eco.hives;
+  
+  
+  // Create the NeuralBee (it has to know about the number of targets
+  // in order to configure its brain) -- but!! the neural bee only knows how to follow the very first generation.
+  // gotta fix that.
+  for(Population h : hives){
+    for(Bee r : h.population){
+        targets.add(r.location);
+    }
+    //create the neural bee
+    v.add(new NeuralBees(targets.size(), random(width), random(height)));
+    }
+    
 }
 
 void draw() {
@@ -141,7 +164,7 @@ void draw() {
     }
   }
   
-  if(avgLife.size() > 0){
+  if(avgLife.size() > 0){ //<>//
     translate(0,15);
     text("Average lifetime: \n",13,18);
     translate(0,15);
@@ -205,15 +228,8 @@ void draw() {
   }
   
   eco.stats(); //display hive stats
-  eco.runHives(); //run all the hive stuff
+  runHives(); //run all the hive stuff
   target.display();
-  
-  
-
-  // Draw the obstacles
-  for (Obstacle obs : obstacles) {
-    obs.display();
-  }
   
 }
 

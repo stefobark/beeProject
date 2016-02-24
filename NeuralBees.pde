@@ -107,26 +107,13 @@ class NeuralBees {
     
   void display() {
     
-    // Draw a triangle rotated in the direction of velocity
-    
-    fill(255,0,0,99);
-    stroke(10);
+
     strokeWeight(1);
     
     pushMatrix();
     translate(location.x,location.y);
-    
-    ellipse(0,-8,5,5);
-    ellipse(0,-5,5,5);
-    
-    ellipse(-10,-5,15,10);
-    ellipse(10,-5,15,10);
-    beginShape();
-    vertex(0, -r*2);
-    vertex(-r, r*2);
-    vertex(r, r*2);
-    endShape(CLOSE);
-    ellipse(0,2,5,8);
+    fill(255,0,0);
+    ellipse(0,0,20,20);
     popMatrix();
   }
 }

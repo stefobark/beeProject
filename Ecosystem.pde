@@ -14,9 +14,8 @@ int genHighHome;
 float avgMRate;
 float avgMForce;
 float avgLife;
-ArrayList<PVector> targets = new ArrayList<PVector>();
 
-ArrayList<NeuralBees> v = new ArrayList<NeuralBees>();
+
 
 PVector desired;
 
@@ -37,16 +36,7 @@ Ecosystem(ArrayList<PVector> startLocs){
     matingPool = new ArrayList<Population>();
     mutationRate = .01;
     
-    // Create the NeuralBee (it has to know about the number of targets
-    // in order to configure its brain) -- but!! the neural bee only knows how to follow the very first generation.
-    // gotta fix that.
-    for(Population h : hives){
-      for(Bee r : h.population){
-          targets.add(r.location);
-      }
-      //create the neural bee
-      v.add(new NeuralBees(targets.size(), random(width), random(height)));
-    }
+    
     
    
   }
@@ -90,20 +80,8 @@ Ecosystem(ArrayList<PVector> startLocs){
     Population hive = eco.hives.get(i);
     hive.drawHome();
   }
- }
-  
-  void runHives(){
     
-    displayHives();
-    for(NeuralBees b : v){
-      // Update the Vehicle
-      b.steer(targets);
-      b.update();
-      b.display();
-    }
-    
-    
-    for(int i = 0; i < eco.hives.size(); i++){
+    for(int i = 0; i < eco.hives.size();i++){
       Population hive = eco.hives.get(i);
       // If the generation hasn't ended yet
       if (hive.lifecycle < hive.lifetime) {
@@ -112,22 +90,19 @@ Ecosystem(ArrayList<PVector> startLocs){
         if ((hive.targetReached()) && (hive.lifecycle < hive.recordtime)) {
           hive.recordtime = hive.lifecycle;
         }
-        
-          if(hive.madeHome > hive.popNum/5){
-            hive.B=255;
-            hive.R=0;
-          }
+        if(hive.madeHome > hive.popNum/5){
+          hive.B=255;
+          hive.R=0;
+        }
         // Otherwise a new generation
-       }
-      else {
+       } else {
           hive.lifecycle = 0;
           hive.fitness();
           hive.selection();
           hive.reproduction(hive.home);
       }
     }
-  
-  }
+ }
 
 // Generate a mating pool
   void selection() {
