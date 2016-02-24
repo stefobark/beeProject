@@ -66,7 +66,7 @@ class Bee {
       // Reward finishing faster and getting close to home
       fitness = 1/(finishTime*recordDist);
     } else {
-      fitness = 1/(targetTime*tDist*100);
+      fitness = 1/(targetTime*tDist*1000);
     }
     
     // Make the function exponential
