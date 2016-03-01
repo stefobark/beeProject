@@ -25,16 +25,11 @@ class Population {
   int madeTarget;
   float maxForce;
   int sWeight;
-  
   int hiveNum;
   
   // Fitness and DNA
   float hiveFitness;
   EcoRules dna;
-  
-  // A Predator controlled by a Perceptron
-
-
   
    // Initialize the population
    Population(float m, int num, float x, float y, int l, float mF, int h) {
@@ -51,39 +46,24 @@ class Population {
     maxForce = mF;
     hiveNum = h;
     popNum = num;
-    
-
-    
-    //make a new set of creatures
+   
+     //make a new set of creatures
     for (int i = 0; i < popNum; i++) {
       population.add(new Bee(home, new DNA(lifetime,mF),hiveNum));
     }
   }
-  
-    
   void drawHome(){
-    
     fill(R,G,B,60);
     strokeWeight(sWeight);
     ellipse(home.x,home.y, 80,80);
   }
  
-
   void live () {
-    
-    
-    
-    // For every hive
-    
     for (int i=0; i < population.size(); i++) {
-      
       Bee b = population.get(i);
       b.checkTarget();
-      //check if they make it home
-      
-       b.run();
+      b.run();
     }
-   
   }
 
   // Did anything finish?
@@ -217,6 +197,8 @@ class Population {
         // Fill the new population with the new child
        
         population.add(new Bee(home, child, hiveNum));
+        
+        
       }
      
     }
@@ -232,7 +214,7 @@ class Population {
   */
   void hiveFitness(){
     
-    hiveFitness = madeHome * 2;
+    hiveFitness = madeHome * 3;
     
     //if no bees have made it home
     if(hiveFitness <= 0){
@@ -240,9 +222,8 @@ class Population {
       //the fitness of hives that have had bees return
       //and remember that the fitness gets 'normalized'-- it gets changed to a number 
       //between 0 and 1 with the map() function
-      hiveFitness = madeTarget * .00001;
+      hiveFitness = madeTarget * .000001;
     }
-    println("made target", madeTarget);
   }
   
   float getFitness() {

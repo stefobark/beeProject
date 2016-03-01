@@ -12,8 +12,8 @@ class Bee {
   PVector velocity;
   PVector acceleration;
   
-  int R = 255;
-  int G = 0;
+  int R = 155;
+  int G = 155;
   int B = 0;
 
   // Size
@@ -117,21 +117,6 @@ class Bee {
     float d = dist(location.x, location.y, target.location.x, target.location.y);
     float homeDist = dist(location.x, location.y, home.x, home.y);
     
-    
-    
-    if (location.x > width || location.x < 0 || location.y > height || location.y < 0){
-      R = 0;
-      G = 255;
-      B = 0;
-      tooFar = true;
-    }
-    
-    //turn blue when it hits the target
-    if (hitTarget){
-      if(homeDist < recordDist) recordDist = homeDist;
-      B = 255;
-      R= 0;
-    }
     if (hitTarget && homeDist < 20) hitHome = true;
     if (d < 20) hitTarget = true;
     
@@ -172,8 +157,8 @@ class Bee {
     
     pushMatrix();
     translate(location.x, location.y);
-    strokeWeight(5);
-    fill(155,155,0);
+    strokeWeight(0);
+    fill(R,G,B);
     ellipse(0,0,10,10);
     popMatrix();
   }

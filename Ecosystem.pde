@@ -14,32 +14,30 @@ int genHighHome;
 float avgMRate;
 float avgMForce;
 float avgLife;
-
-
-
+NeuralBees nBee; 
+ArrayList<PVector> nTargets = new ArrayList<PVector>();
 PVector desired;
-
-Ecosystem(ArrayList<PVector> startLocs){
-   int countHives = 0;
-   // The NeuralBee's desired location
-  desired = new PVector(width/2,height/2);
-  
-    for(PVector s : startLocs){
-      countHives++;
-      
-      //dont want to give it a mutation rate higher than .2
-      //or a lifetime bigger than 2000 or smaller than 300
-      //and a possible max force of up to 2
-      hives.add(new Population(random(0,.2),40,s.x,s.y,int(random(300,2000)), random(0,2), countHives));
-    }
-    popNum = hives.size();
-    matingPool = new ArrayList<Population>();
-    mutationRate = .01;
-    
-    
-    
+int countHives = 0;
    
+Ecosystem(ArrayList<PVector> startLocs){
+
+   // The NeuralBee's desired location
+  desired = new PVector(width/2+50,height/2-50);
+  
+  for(PVector s : startLocs){
+    countHives++;
+    hives.add(new Population(random(0,.2),40,s.x,s.y,int(random(300,2000)), random(0,2), countHives));
   }
+  
+  //get the predator bee's targets, build the predator bee. but!! we need to update the target list every time a 
+  //hive produces a new generation!
+  nTargets = getTargets();
+  nBee = new NeuralBees(nTargets.size(), random(width), random(height));
+  popNum = hives.size();
+  println(nTargets.size());
+  matingPool = new ArrayList<Population>();
+  mutationRate = .01;
+}
   
    void genPerf(int highest){
     genPerformance = highest;
@@ -73,36 +71,58 @@ Ecosystem(ArrayList<PVector> startLocs){
       popMatrix();
     }
   }
-  
+
+void nBeeLive(){
+  nBee.steer(nTargets);
+  nBee.update();
+  nBee.display();
+}
+ 
+ArrayList<PVector> getTargets(){
+  nTargets.clear();
+  for(Population p : hives){
+    for(Bee b : p.population){
+      nTargets.add(b.location);
+    }
+  }
+  return nTargets;
+}
+      
  void displayHives(){
   //draw home circle
   for(int i = 0; i < eco.hives.size(); i++){
     Population hive = eco.hives.get(i);
     hive.drawHome();
   }
+  
+  for(int i = 0; i < eco.hives.size();i++){
+    Population hive = eco.hives.get(i);
     
-    for(int i = 0; i < eco.hives.size();i++){
-      Population hive = eco.hives.get(i);
-      // If the generation hasn't ended yet
-      if (hive.lifecycle < hive.lifetime) {
-        hive.lifecycle++;
-        hive.live();
-        if ((hive.targetReached()) && (hive.lifecycle < hive.recordtime)) {
-          hive.recordtime = hive.lifecycle;
-        }
-        if(hive.madeHome > hive.popNum/5){
-          hive.B=255;
-          hive.R=0;
-        }
-        // Otherwise a new generation
-       } else {
-          hive.lifecycle = 0;
-          hive.fitness();
-          hive.selection();
-          hive.reproduction(hive.home);
+    // If the generation hasn't ended yet
+    if (hive.lifecycle < hive.lifetime) {
+      hive.lifecycle++;
+      hive.live();
+      if ((hive.targetReached()) && (hive.lifecycle < hive.recordtime)) {
+        hive.recordtime = hive.lifecycle;
       }
+      if(hive.madeHome > hive.popNum/5){
+        hive.B=255;
+        hive.R=0;
+      }
+      // Otherwise a new generation
+     } else {
+        hive.lifecycle = 0;
+        hive.fitness();
+        hive.selection();
+        hive.reproduction(hive.home);
     }
- }
+  }
+}
+
+  void newNBee(){
+      nTargets = getTargets();
+      nBee = new NeuralBees(nTargets.size(), random(width), random(height));
+  }
 
 // Generate a mating pool
   void selection() {
@@ -188,9 +208,6 @@ Ecosystem(ArrayList<PVector> startLocs){
      
     // Refill the population with children from the mating pool
     for (int i = 0; i < popNum; i++){
-      println(" \n                    Child Hive #", i, "\n");
-      // Spin the wheel of fortune to pick two parents
-      
       int mom = int(random(hives.size()));
       int dad = int(random(hives.size()));
       

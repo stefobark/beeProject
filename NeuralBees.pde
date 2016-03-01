@@ -14,6 +14,7 @@ class NeuralBees {
   float r;
   float maxforce;    // Maximum steering force
   float maxspeed;    // Maximum speed
+  ArrayList<PVector> targets = new ArrayList<PVector>();
 
   NeuralBees(int n, float x, float y) {
     brain = new Perceptron(n,0.001);
@@ -21,8 +22,8 @@ class NeuralBees {
     velocity = new PVector(0,0);
     location = new PVector(x,y);
     r = 3.0;
-    maxspeed = 4;
-    maxforce = 0.8;
+    maxspeed = 2;
+    maxforce = 3;
   }
 
   // Method to update location
@@ -49,16 +50,10 @@ class NeuralBees {
     // Make an array of forces
     PVector[] forces = new PVector[targets.size()];
     
-    // Steer towards all targets
+    // Steer towards targets
     for (int i = 0; i < forces.length; i++) {
       PVector t = targets.get(i);
-      
-      //if it is within 80, we will seek
-      if(t.dist(location) < 80){
-        forces[i] = seek(t);
-      } else {
-        forces[i] = separate(t);
-      }
+       forces[i] = seek(t);
     }
     // That array of forces is the input to the brain
     PVector result1 = brain.feedforward(forces);
@@ -74,19 +69,22 @@ class NeuralBees {
   // STEER = DESIRED MINUS VELOCITY
   PVector seek(PVector target) {
     PVector desired = PVector.sub(target,location);  // A vector pointing from the location to the target
-    
-    // Normalize desired and scale to maximum speed
-    desired.normalize();
-    desired.mult(maxspeed);
-    // Steering = Desired minus velocity
-    PVector steer = PVector.sub(desired,velocity);
-    steer.limit(maxforce);  // Limit to maximum steering force
-    
-    return steer;
+    if(location.dist(target) < 100){
+      // Normalize desired and scale to maximum speed
+      desired.normalize();
+      desired.mult(maxspeed);
+      // Steering = Desired minus velocity
+      PVector steer = PVector.sub(desired,velocity);
+      steer.limit(maxforce);  // Limit to maximum steering force
+      return steer;
+    } else {
+      PVector steer = new PVector(0,0);
+      return steer;
+    }
   }
   
   PVector separate(PVector target) {
-    PVector desired = PVector.sub(target,location);  // A vector pointing from the location to the target
+    PVector desired = PVector.sub(target,location);
     float distance = desired.mag();
     // Normalize desired and scale to maximum speed
     desired.normalize();
@@ -106,10 +104,7 @@ class NeuralBees {
   }
     
   void display() {
-    
-
     strokeWeight(1);
-    
     pushMatrix();
     translate(location.x,location.y);
     fill(255,0,0);

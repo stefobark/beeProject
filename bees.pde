@@ -42,18 +42,7 @@ Ecosystem eco; //an ecosystem is a collection of hives
 int ecoLife =  2000; //the lifetime of the ecosystem. this will influence the optimal value of the hive's "lifetime"
 ArrayList<PVector> startLocs = new ArrayList<PVector>();
 ArrayList<PVector> targets = new ArrayList<PVector>();
-  ArrayList<NeuralBees> v = new ArrayList<NeuralBees>();; 
 
-void runHives(){
-    
-    eco.displayHives();
-    for(NeuralBees b : v){
-      // Update the Vehicle
-      b.steer(targets);
-      b.update();
-      b.display();
-    }
-}
 
 void setup() {
   size(600, 600);
@@ -77,19 +66,8 @@ void setup() {
   eco =  new Ecosystem(startLocs);
   target = new Target(width/2+100, height/2-100, 24, 24);
   highGraph = new Graph(new PVector(20,height-20));
-  ArrayList<Population> hives = eco.hives;
   
   
-  // Create the NeuralBee (it has to know about the number of targets
-  // in order to configure its brain) -- but!! the neural bee only knows how to follow the very first generation.
-  // gotta fix that.
-  for(Population h : hives){
-    for(Bee r : h.population){
-        targets.add(r.location);
-    }
-    //create the neural bee
-    v.add(new NeuralBees(targets.size(), random(width), random(height)));
-    }
     
 }
 
@@ -99,10 +77,8 @@ void draw() {
    if(graphArray.size() > 0){
       highGraph.drawLine(graphArray);
     }
-  //in the following messy chunk of code, I'm just printing some stats about the ecosystem
-  
+    
   fill(0); //make the text black
-  
   //we're going to be doing a lot of "translate()"ing. so, remember pushMatrix() and popMatrix()
   pushMatrix();
   textSize(26);
@@ -194,13 +170,13 @@ void draw() {
   //this will reset the whole ecosystem every "ecoLife" number of frames.
   if(count > ecoLife){
     hiveGen++;
-    
     eco.collectHiveStats(mostHome,highestEver);
     avgMRates.add(eco.avgMRate);
     avgMForce.add(eco.avgMForce);
     avgLife.add(eco.avgLife);
     //use the highest score ever to evaluate whether or not to apply the big or small mutation rate
     eco.selection();
+    eco.newNBee();
     trackHigh.add(mostHome);
     graphArray.add(new PVector(10,mostHome));
     highGraph.drawLine(graphArray);
@@ -209,35 +185,18 @@ void draw() {
     mostHomeHive = 0;
   }
   
-  eco.firstToFive(); //this doesn't really tell us anything useful. I might get rid of it.
-   
   for(int i=0; i <= eco.hives.size()-1; i++){
       
       Population r = eco.hives.get(i);
-      
       if(r.madeHome > mostHome){
           mostHome = r.madeHome;
           mostHomeHive = i;
       }
   }
-      
-  if(eco.firstToFive() < 98){
-   
-    firstToFive = eco.firstToFive();
-       
-  }
   
+  eco.displayHives();
   eco.stats(); //display hive stats
-  runHives(); //run all the hive stuff
   target.display();
-  
-}
+  eco.nBeeLive();
 
-
-
-// Move the target if the mouse is pressed
-// System will adapt to new target
-void mousePressed() {
-  target.location.x = mouseX;
-  target.location.y = mouseY;
 }
