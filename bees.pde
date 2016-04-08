@@ -119,7 +119,7 @@ void draw() {
       }
     }
   }
-    translate(0,15);
+    translate(0,15); //<>//
  
   if(avgMRates.size() > 0){
     translate(0,15);
