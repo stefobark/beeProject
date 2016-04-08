@@ -33,7 +33,13 @@ class Population {
   
    // Initialize the population
    Population(float m, int num, float x, float y, int l, float mF, int h) {
-     
+    //limits
+    if(m <=0) m = .01;
+    if(m >=1) m = .999;
+    if(mF <= 0) mF = .1;
+    if(mF >= 1) mF = .999;
+    if(l > 1000) l = 1000;
+    if(l < 100) l = 100;
     //mutation rate will start off as a random number between 1 and 0.
     mutationRate = m;
     dna = new EcoRules(l,m,x,y,mF); 

@@ -10,12 +10,13 @@ float hMRate;
  float nMRate;
 float mutRate;
 float genPerformance;
+ArrayList<Float> avgPerfArray = new ArrayList<Float>();
 int genHighHome;
 float avgMRate;
 float avgMForce;
 float avgLife;
 NeuralBees nBee; 
-ArrayList<PVector> nTargets = new ArrayList<PVector>();
+ArrayList<Bee> nTargets = new ArrayList<Bee>();
 PVector desired;
 int countHives = 0;
    
@@ -40,8 +41,13 @@ Ecosystem(ArrayList<PVector> startLocs){
 }
   
    void genPerf(int highest){
-    genPerformance = highest;
-  }
+    float avg = 0;
+    avgPerfArray.add(float(highest));
+    for(float a : avgPerfArray){
+     avg += a;
+    }
+    genPerformance = avgPerfArray.size() / avg;
+   }
   
   void getGenHigh(int high){
     genHighHome = high;
@@ -72,17 +78,37 @@ Ecosystem(ArrayList<PVector> startLocs){
     }
   }
 
+//let's make the predator bee go after the worst performing hive
+PVector worstHiveLoc(){
+  PVector worstHiveLoc = new PVector();
+  float w = 9999;
+  ArrayList<Float> perf = new ArrayList<Float>();
+  for(int i = 0; i < hives.size(); i++){
+      Population hive = hives.get(i);
+      if(hive.madeHome == 0) perf.add(hive.madeTarget*.1);
+      else perf.add(float(hive.madeHome));
+  }
+  for(int j = 0; j < perf.size(); j++){
+      float check = perf.get(j);
+      if(check < w) w = check;
+      Population worstHive = hives.get(j);
+      worstHiveLoc = worstHive.home;
+  }
+  return worstHiveLoc;
+}
+
 void nBeeLive(){
-  nBee.steer(nTargets);
+  PVector wL = worstHiveLoc();
+  nBee.steer(nTargets,wL);
   nBee.update();
   nBee.display();
 }
  
-ArrayList<PVector> getTargets(){
+ArrayList<Bee> getTargets(){
   nTargets.clear();
   for(Population p : hives){
     for(Bee b : p.population){
-      nTargets.add(b.location);
+      nTargets.add(b);
     }
   }
   return nTargets;
@@ -111,10 +137,26 @@ ArrayList<PVector> getTargets(){
       }
       // Otherwise a new generation
      } else {
+        /* 
+        / HERE, I SOLVED THAT NEURAL BEE TARGET PROBLEM. IT WAS SIMPLE!
+        */
+        
+        //remove dead bees from neural bee targets
+        for(int x = 1; x < nTargets.size(); x++){
+          Bee oldBee = nTargets.get(x);
+          if(oldBee.hiveNum == hive.hiveNum) nTargets.remove(oldBee);
+        }
+        
         hive.lifecycle = 0;
         hive.fitness();
         hive.selection();
         hive.reproduction(hive.home);
+        
+        //add new bees to neural bee targets
+        for(Bee newBee : hive.population){
+          nTargets.add(newBee);
+        }
+        
     }
   }
 }
@@ -220,18 +262,11 @@ ArrayList<PVector> getTargets(){
         EcoRules dadgenes = dR.getDNA();
         
         EcoRules child = momgenes.crossover(dadgenes, genHighHome, genPerformance);
-       
+        
         
         float mForce = child.genes.get(4);
-        
         float newMRate = child.genes.get(1);
-        if(newMRate < 0) newMRate = .0001;
-        if(newMRate > 4) newMRate = 0.4;
-        
-        int newLife = int(child.genes.get(0));
-        if(newLife < 100) newLife = int(random(100,120));
-        if(newLife > 1000) newLife = int(random(900,1000));
-        
+        int newLife = int(child.genes.get(0));;
         float thisHomeX = homeX.get(i);
         float thisHomeY = homeY.get(i);
         

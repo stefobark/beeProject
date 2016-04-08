@@ -25,7 +25,7 @@ class EcoRules{
   
   // CROSSOVER
   // Creates new DNA sequence from two (this & and a partner)
-  EcoRules crossover(EcoRules partner, float genHighHome, float last) {
+  EcoRules crossover(EcoRules partner, float genHighHome, float prevAvg) {
     ArrayList<Float> child = new ArrayList<Float>();
     
     // Pick a midpoint, the point where we will stop taking from one parent and start taking from another
@@ -39,32 +39,24 @@ class EcoRules{
     for (int i = 0; i < genes.size(); i++) {
       
       //high rate
-      hMRate = random(.85,1.15);
+      hMRate = random(.5,1);
       
       //very high rate
-      vHMRate  = random(.5,1.5);
+      vHMRate  = random(1,1.5);
       
       //normal
-      nMRate  = random(.9,1.1);
-      
-      //small.. for very successful generations
-      sMRate  = random(.99,1.01); 
-    
-   if(genHighHome / last > 1){
-        mutRate = sMRate;
-        
-      } else if(genHighHome / last < .30 || genHighHome < 1){
-        // if bees are not returning to any of the hives we know we need to change some values. 
-        // so, we use a bigger mutation rate.
+      nMRate  = random(.001,.3);
+  
+      // if bees are not returning to any of the hives we know we need to change some values. 
+      // so, we use a bigger mutation rate.
+      if(genHighHome / prevAvg > 1){
+      } else if(genHighHome / prevAvg < .20 || genHighHome < 1){
         mutRate = vHMRate;
-      } else if( genHighHome / last < .50 ){
+      } else if( genHighHome / prevAvg < .30 ){
         mutRate = hMRate;
       } else {
         mutRate = nMRate;
-        
-        //or if it was higher than the highest so far
       } 
-      
       
       if (i > crossover) child.add(genes.get(i)*mutRate);
       else               child.add(partner.genes.get(i)*mutRate);

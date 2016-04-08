@@ -39,7 +39,7 @@ int firstToFive;
 ArrayList<Obstacle> obstacles;  //an array list to keep track of all the obstacles!
 ArrayList<Integer> trackHigh = new ArrayList<Integer>(); //keep track of the highest number of bees to return in one meta-generation (10,000 frames)
 Ecosystem eco; //an ecosystem is a collection of hives
-int ecoLife =  2000; //the lifetime of the ecosystem. this will influence the optimal value of the hive's "lifetime"
+int ecoLife =  1000; //the lifetime of the ecosystem. this will influence the optimal value of the hive's "lifetime"
 ArrayList<PVector> startLocs = new ArrayList<PVector>();
 ArrayList<PVector> targets = new ArrayList<PVector>();
 
@@ -75,7 +75,7 @@ void draw() {
   background(255);
   count++;
    if(graphArray.size() > 0){
-      highGraph.drawLine(graphArray);
+      highGraph.drawLine(graphArray,0);
     }
     
   fill(0); //make the text black
@@ -98,56 +98,12 @@ void draw() {
   translate(0,15);
   text("Highest Ever: " + highestEver, 13, 18);
  
-  if(trackHigh.size() > 0){
-    
-    translate(0,35);
-    text("Max returners:", 13, 18);
-    translate(0,15);
-   
-    int trackHighSize = trackHigh.size()-1;
-    
-    for(int i = 0; i <= trackHighSize; i++){
-      int h = trackHigh.get(i);
-      genHigh = h;
-      
-      int f = i - trackHighSize;
-      
-      translate(0,15);
-      text(f + " :: " + h, 25, 18,20);
-      if(h > highestEver){
-        highestEver = h;
-      }
-    }
-  }
     translate(0,15); //<>//
- 
-  if(avgMRates.size() > 0){
-    translate(0,15);
-    text("Average mutation rates: \n",13,18);
-    translate(0,15);
-    for(float a : avgMRates){
-      text(a, 25, 18);
-      translate(0,15);
-    }
-  }
-  if(avgMForce.size() > 0){
-    translate(0,15);
-    text("Average max force: \n",13,18);
-    translate(0,15);
-    for(float a : avgMForce){
-      text(a, 25, 18);
-      translate(0,15);
-    }
-  }
   
-  if(avgLife.size() > 0){ //<>//
-    translate(0,15);
-    text("Average lifetime: \n",13,18);
-    translate(0,15);
-    for(float a : avgLife){
-      text(a, 25, 18);
-      translate(0,15);
-    }
+  if(avgLife.size() > 3){
+    avgLife.remove(0);
+    avgMForce.remove(0);
+    avgMRates.remove(0);
   }
   
   popMatrix();
@@ -179,7 +135,7 @@ void draw() {
     eco.newNBee();
     trackHigh.add(mostHome);
     graphArray.add(new PVector(10,mostHome));
-    highGraph.drawLine(graphArray);
+    highGraph.drawLine(graphArray,0);
     count = 0;
     mostHome = 0;
     mostHomeHive = 0;

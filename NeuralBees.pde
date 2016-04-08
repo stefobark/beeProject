@@ -7,14 +7,14 @@ class NeuralBees {
   
   // Vehicle now has a brain!
   Perceptron brain;
-  
+  PVector desired = new PVector(width/2+100, height/2-100);
   PVector location;
   PVector velocity;
   PVector acceleration;
   float r;
   float maxforce;    // Maximum steering force
   float maxspeed;    // Maximum speed
-  ArrayList<PVector> targets = new ArrayList<PVector>();
+  //ArrayList<ArrayList<PVector>> targets = new ArrayList<ArrayList<PVector>>();
 
   NeuralBees(int n, float x, float y) {
     brain = new Perceptron(n,0.001);
@@ -46,20 +46,21 @@ class NeuralBees {
   }
   
   // Here is where the brain processes everything
-  void steer(ArrayList<PVector> targets) {
+  void steer(ArrayList<Bee> targets, PVector worstHiveLoc) {
     // Make an array of forces
     PVector[] forces = new PVector[targets.size()];
-    
+    println(worstHiveLoc);
     // Steer towards targets
     for (int i = 0; i < forces.length; i++) {
-      PVector t = targets.get(i);
+      Bee b = targets.get(i);
+      PVector t = b.location;
        forces[i] = seek(t);
     }
     // That array of forces is the input to the brain
     PVector result1 = brain.feedforward(forces);
     // Use the results to steer the vehicle
     applyForce(result1);
-    PVector desired = new PVector(width/2, height/2);
+    PVector desired = worstHiveLoc;
     PVector error = PVector.sub(desired, location);
     brain.train(forces,error);
     
